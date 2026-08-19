@@ -3,27 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Free QR Code Generator — No Signup, No Watermark, No Expiry</title>
-<meta name="description" content="Create a QR code from any link or text free, with no signup, no watermark, and codes that never expire. Pick custom colors and padding, then download as PNG or SVG. Runs entirely in your browser — nothing you type is ever uploaded.">
+<title>Free QR Code Generator — No Signup, No Expiry</title>
+<meta name="description" content="Create a QR code from any link or text — free, no signup, codes that never expire. Custom colors, PNG or SVG download, all in your browser.">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0f9d78">
 <link rel="canonical" href="https://free-qr-code-generator-no-signup.com/">
 
 <meta property="og:site_name" content="Free QR Code Generator">
-<meta property="og:title" content="Free QR Code Generator — No Signup, No Watermark, No Expiry">
-<meta property="og:description" content="Create a QR code from any link or text free, with no signup and no watermark. Custom colors, adjustable padding, PNG or SVG download.">
+<meta property="og:title" content="Free QR Code Generator — No Signup, No Expiry">
+<meta property="og:description" content="Create a QR code from any link or text — free, no signup, codes that never expire. Custom colors, PNG or SVG download.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://free-qr-code-generator-no-signup.com/">
 <meta property="og:locale" content="en_US">
 
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Free QR Code Generator — No Signup, No Watermark, No Expiry">
-<meta name="twitter:description" content="Create a QR code from any link or text free, with no signup and no watermark. Custom colors, adjustable padding, PNG or SVG download.">
+<meta name="twitter:title" content="Free QR Code Generator — No Signup, No Expiry">
+<meta name="twitter:description" content="Create a QR code from any link or text — free, no signup, codes that never expire. Custom colors, PNG or SVG download.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
 
 <script type="application/ld+json">
 {
@@ -31,7 +32,7 @@
   "@type": "WebApplication",
   "name": "Free QR Code Generator",
   "url": "https://free-qr-code-generator-no-signup.com/",
-  "description": "Create a QR code from any link or text free, with no signup, no watermark, and codes that never expire. Choose custom colors and padding, then download as PNG or SVG.",
+  "description": "Create a QR code from any link or text free, with no signup, and codes that never expire. Choose custom colors and padding, then download as PNG or SVG.",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Any (runs in browser)",
   "offers": {
@@ -41,7 +42,6 @@
   },
   "featureList": [
     "No signup or account required",
-    "No watermark on generated codes",
     "Codes never expire or get deactivated",
     "Custom foreground and background colors",
     "Adjustable quiet zone / padding",
@@ -59,7 +59,7 @@
     {
       "@type": "Question",
       "name": "Is this QR code generator really free?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Yes. There's no signup, no paywall, and no limit on how many codes you can create or download." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. There are no signups, no paywall, and no limit on how many codes you can create or download." }
     },
     {
       "@type": "Question",
@@ -100,6 +100,8 @@
     --line: #d7ddda;
     --signal: #0f9d78;
     --signal-dim: #0f9d7822;
+    --pop: #ffd166;
+    --pop-2: #ff6b6b;
   }
   *{box-sizing:border-box;}
   html, body{ height:100%; margin:0; }
@@ -109,7 +111,7 @@
     background: var(--signal);
     color: var(--ink);
     min-height:100vh;
-    padding: 40px 20px;
+    padding: 28px 20px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -117,29 +119,41 @@
   .wrap{ width:100%; max-width: 1120px; }
 
   h1{
-    font-family:'Space Grotesk', sans-serif;
+    font-family:'Plus Jakarta Sans', sans-serif;
     font-weight:700;
-    font-size: clamp(28px, 4vw, 40px);
+    font-size: clamp(22px, 2.6vw, 28px);
     letter-spacing:-0.01em;
     color: #ffffff;
-    margin: 10px 0 12px;
-    max-width: 16ch;
+    margin: 0 0 8px;
+    text-align:center;
+  }
+  .pop-word{
+    color: var(--ink);
+    background: var(--pop);
+    padding: 4px 8px 6px;
+    line-height:1.3;
+    border-radius: 6px;
+    display:inline-block;
+    transform: rotate(-2deg);
   }
   .lede{
     color: rgba(255,255,255,.88);
-    max-width: 56ch;
-    line-height:1.55;
-    font-size:15px;
-    margin: 0 0 30px;
+    max-width: 90ch;
+    margin-left:auto;
+    margin-right:auto;
+    text-align:center;
+    line-height:1.5;
+    font-size: 17px;
+    margin-bottom: 20px;
   }
 
   .content-section{
     margin-top: 56px;
   }
   .content-section h2{
-    font-family:'Space Grotesk', sans-serif;
+    font-family:'Plus Jakarta Sans', sans-serif;
     font-weight:600;
-    font-size: 22px;
+    font-size: 25px;
     color: #ffffff;
     margin: 0 0 18px;
   }
@@ -153,18 +167,20 @@
   }
   .feature-card{
     background: var(--panel);
-    border-radius: 10px;
+    border: 2px solid var(--ink);
+    border-radius: 14px;
     padding: 18px 20px;
+    box-shadow: 4px 4px 0 rgba(16,32,28,.2);
   }
   .feature-card h3{
-    font-family:'Space Grotesk', sans-serif;
-    font-size:15px;
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-size:16.5px;
     font-weight:600;
     color: var(--ink);
     margin: 0 0 6px;
   }
   .feature-card p{
-    font-size:13px;
+    font-size:14.5px;
     line-height:1.5;
     color: var(--ink-soft);
     margin:0;
@@ -182,26 +198,32 @@
   }
   .steps-list li{
     background: var(--panel);
-    border-radius: 10px;
+    border: 2px solid var(--ink);
+    border-radius: 14px;
     padding: 18px 20px;
+    box-shadow: 4px 4px 0 rgba(16,32,28,.2);
   }
   .step-num{
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 11px;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight:600;
     letter-spacing:.1em;
-    color: var(--signal);
-    display:block;
-    margin-bottom: 8px;
+    color: var(--ink);
+    background: var(--pop);
+    display:inline-block;
+    padding: 3px 9px;
+    border-radius: 999px;
+    margin-bottom: 10px;
   }
   .steps-list h3{
-    font-family:'Space Grotesk', sans-serif;
-    font-size:15px;
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-size:16.5px;
     font-weight:600;
     color: var(--ink);
     margin: 0 0 6px;
   }
   .steps-list p{
-    font-size:13px;
+    font-size:14.5px;
     line-height:1.5;
     color: var(--ink-soft);
     margin:0;
@@ -209,7 +231,9 @@
 
   .faq{
     background: var(--panel);
-    border-radius: 10px;
+    border: 2px solid var(--ink);
+    border-radius: 18px;
+    box-shadow: 6px 6px 0 rgba(16,32,28,.2);
     overflow:hidden;
   }
   .faq-item{
@@ -218,14 +242,14 @@
   }
   .faq-item:last-child{ border-bottom:none; }
   .faq-item h3{
-    font-family:'Space Grotesk', sans-serif;
-    font-size:15px;
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-size:16.5px;
     font-weight:600;
     color: var(--ink);
     margin: 0 0 6px;
   }
   .faq-item p{
-    font-size:13.5px;
+    font-size:15px;
     line-height:1.55;
     color: var(--ink-soft);
     margin:0;
@@ -236,12 +260,12 @@
     padding-top: 22px;
     border-top: 1px solid rgba(255,255,255,.25);
     color: rgba(255,255,255,.75);
-    font-size: 12.5px;
+    font-size: 13.5px;
   }
 
   .layout{
     display:grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 1fr;
     gap: 24px;
     align-items:start;
   }
@@ -252,16 +276,17 @@
   /* ---- Controls (left) ---- */
   .panel{
     background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 10px;
+    border: 2px solid var(--ink);
+    border-radius: 18px;
     padding: 26px;
+    box-shadow: 6px 6px 0 rgba(16,32,28,.22);
   }
   .field{ margin-bottom: 24px; }
   .field:last-child{ margin-bottom:0; }
   .field-label{
     display:block;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 11px;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12px;
     letter-spacing:.1em;
     text-transform:uppercase;
     color: var(--ink-soft);
@@ -275,8 +300,8 @@
     border: 1px solid var(--line);
     border-radius: 6px;
     color: var(--ink);
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 13.5px;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 15px;
     padding: 12px;
     outline:none;
   }
@@ -285,33 +310,34 @@
 
   .seg{
     display:flex;
-    border: 1px solid var(--line);
-    border-radius: 7px;
+    border: 2px solid var(--ink);
+    border-radius: 10px;
     overflow:hidden;
   }
   .seg button{
     flex:1;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12.5px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:13.5px;
     padding: 9px 6px;
     border:none;
     background: var(--panel);
     color: var(--ink-soft);
     cursor:pointer;
-    border-right: 1px solid var(--line);
+    border-right: 2px solid var(--ink);
     transition: background .15s, color .15s;
   }
   .seg button:last-child{ border-right:none; }
   .seg button[aria-pressed="true"]{
-    background: var(--ink);
-    color: #fff;
+    background: var(--pop);
+    color: var(--ink);
+    font-weight:600;
   }
   .seg button:focus-visible{ outline: 2px solid var(--signal); outline-offset:-2px; }
 
   input[type="range"]{ width:100%; accent-color: var(--signal); }
   .size-readout{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11.5px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px;
     color: var(--ink-soft);
     margin-top:6px;
   }
@@ -321,8 +347,8 @@
   .swatch-box{
     display:inline-flex;
     width:28px; height:28px;
-    border:1px solid var(--line);
-    border-radius:6px;
+    border:2px solid var(--ink);
+    border-radius:8px;
     overflow:hidden;
   }
   .swatch-box input[type="color"]{
@@ -332,8 +358,8 @@
     cursor:pointer;
   }
   .swatch span.label{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11.5px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
     line-height:1;
     color: var(--ink-soft);
   }
@@ -343,9 +369,10 @@
   /* ---- Preview (right) ---- */
   .preview{
     background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 22px;
+    border: 2px solid var(--ink);
+    border-radius: 18px;
+    padding: 26px;
+    box-shadow: 6px 6px 0 rgba(16,32,28,.22);
   }
   .readout{
     display:flex;
@@ -353,8 +380,8 @@
     justify-content:space-between;
     row-gap:6px;
     column-gap:14px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 10.5px;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11.5px;
     letter-spacing:.08em;
     color: var(--ink-soft);
     margin-bottom: 14px;
@@ -369,10 +396,10 @@
     max-width: 420px;
     margin: 0 auto;
     aspect-ratio: 1/1;
-    border-radius: 6px;
+    border-radius: 12px;
     overflow:hidden;
     background: var(--qr-paper, #ffffff);
-    border: 1px solid var(--line);
+    border: 2px solid var(--ink);
   }
   .qr-wrap svg{ display:block; width:100%; height:100%; }
   .scanline{
@@ -389,33 +416,34 @@
     position:absolute; inset:0;
     display:flex; align-items:center; justify-content:center;
     text-align:center; padding: 24px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 12px;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 13.5px;
     color: #93a29c;
   }
 
   .downloads{ display:flex; gap:10px; margin-top:18px; max-width:420px; margin-left:auto; margin-right:auto; }
   .dl-btn{
     flex:1;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12px;
-    letter-spacing:.05em;
-    color: #fff;
-    background: var(--ink);
-    border:none;
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-weight:600;
+    font-size:15px;
+    color: var(--ink);
+    background: var(--pop);
+    border: 2px solid var(--ink);
     padding: 11px 12px;
-    border-radius:6px;
+    border-radius:10px;
     cursor:pointer;
-    transition: background .15s, transform .15s;
+    box-shadow: 3px 3px 0 rgba(16,32,28,.3);
+    transition: background .15s, transform .1s, box-shadow .1s;
   }
-  .dl-btn:hover{ background:#1c332c; }
-  .dl-btn:active{ transform: translateY(1px); }
-  .dl-btn:disabled{ opacity:.35; cursor:not-allowed; }
+  .dl-btn:hover{ transform: translateY(-2px); box-shadow: 4px 5px 0 rgba(16,32,28,.3); }
+  .dl-btn:active{ transform: translateY(1px) scale(0.97); box-shadow: 1px 1px 0 rgba(16,32,28,.3); }
+  .dl-btn:disabled{ opacity:.35; cursor:not-allowed; transform:none; box-shadow: 3px 3px 0 rgba(16,32,28,.3); }
   .dl-btn:focus-visible{ outline: 2px solid var(--signal); outline-offset:2px; }
 
   .error-msg{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
     color:#c4453e;
     margin-top:10px;
   }
@@ -429,8 +457,8 @@
 
 <div id="app">
   <div class="wrap">
-    <h1>Free QR code generator — no signup, no watermark</h1>
-    <p class="lede">Paste a link or type any text and get a scannable QR code in seconds. No account, no expiry date, no logo stamped on top. Everything runs in your browser, so nothing you type is ever uploaded.</p>
+    <h1>Free QR code generator <span class="pop-word">no signup</span></h1>
+    <p class="lede">Paste a link or type any text and get a scannable QR code in seconds.<br>No account, no expiry — everything stays private in your browser.</p>
 
     <div class="layout">
       <!-- Controls -->
@@ -458,9 +486,16 @@
         </div>
 
         <div class="field">
-          <label class="field-label" for="size-range">Export size</label>
-          <input id="size-range" type="range" min="200" max="800" step="20" v-model.number="printSize">
-          <div class="size-readout">{{ printSize }} × {{ printSize }} px</div>
+          <label class="field-label" id="size-label">Export size</label>
+          <div class="seg" role="group" aria-labelledby="size-label">
+            <button
+              v-for="s in sizeOptions"
+              :key="s"
+              type="button"
+              :aria-pressed="printSize === s"
+              @click="printSize = s"
+            >{{ s }}</button>
+          </div>
         </div>
 
         <div class="field">
@@ -500,7 +535,7 @@
           <span>PADDING <b>{{ quietZone }}</b></span>
           <span>SIZE <b>{{ printSize }}px</b></span>
         </div>
-        <div class="qr-wrap" :style="{ '--qr-paper': paperColor }">
+        <div class="qr-wrap" role="img" aria-label="Generated QR code preview" :style="{ '--qr-paper': paperColor }">
           <div v-if="!text.trim()" class="empty-state">Your code will appear here</div>
           <div v-else-if="error" class="empty-state">{{ error }}</div>
           <div v-else v-html="svgMarkup" :key="printKey"></div>
@@ -520,10 +555,6 @@
         <div class="feature-card">
           <h3>No signup required</h3>
           <p>Generate as many codes as you like. There's no account to create and no email to hand over.</p>
-        </div>
-        <div class="feature-card">
-          <h3>No watermark</h3>
-          <p>The code you download is exactly what you see — no logo or branding stamped on top of it.</p>
         </div>
         <div class="feature-card">
           <h3>Codes never expire</h3>
@@ -570,7 +601,7 @@
       <div class="faq">
         <div class="faq-item">
           <h3>Is this QR code generator really free?</h3>
-          <p>Yes. There's no signup, no paywall, and no limit on how many codes you can create or download.</p>
+          <p>Yes. There are no signups, no paywall, and no limit on how many codes you can create or download.</p>
         </div>
         <div class="faq-item">
           <h3>Do the QR codes expire or stop working?</h3>
@@ -596,19 +627,21 @@
     </section>
 
     <footer>
-      <p>Free QR code generator — no signup, no watermark, no expiry. Codes are generated locally in your browser.</p>
+      <p>Free QR code generator — no signup, no expiry. Codes are generated locally in your browser.</p>
     </footer>
   </div>
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function(){
 const { createApp, ref, computed, watch } = Vue;
 
 createApp({
   setup(){
     const text = ref('');
     const ecLevel = ref('M');
-    const printSize = ref(320);
+    const printSize = ref(256);
+    const sizeOptions = [64, 128, 256, 512, 1024];
     const quietZone = ref(2);
     const inkColor = ref('#10201c');
     const paperColor = ref('#ffffff');
@@ -714,12 +747,13 @@ createApp({
     }
 
     return {
-      text, ecLevel, ecLevels, printSize, quietZone, paddingOptions, inkColor, paperColor,
+      text, ecLevel, ecLevels, printSize, sizeOptions, quietZone, paddingOptions, inkColor, paperColor,
       error, matrix, svgMarkup, canDownload, showScan, printKey,
       downloadPNG, downloadSVG,
     };
   }
 }).mount('#app');
+});
 </script>
 
 </body>
