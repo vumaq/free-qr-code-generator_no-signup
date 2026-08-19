@@ -1,9 +1,9 @@
-const CACHE_NAME = 'qr-generator-v2';
+const CACHE_NAME = 'qr-generator-v3';
 const ASSETS = [
-  '/',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png',
+  './',
+  'manifest.json',
+  'icon-192.png',
+  'icon-512.png',
   'https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.prod.js',
   'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js',
 ];

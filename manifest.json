@@ -2,27 +2,27 @@
   "name": "Free QR Code Generator — No Signup",
   "short_name": "QR Generator",
   "description": "Create a QR code from any link or text — free, no signup required. Runs entirely in your browser.",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": ".",
+  "scope": ".",
   "display": "standalone",
-  "background_color": "#0f9d78",
-  "theme_color": "#0f9d78",
+  "background_color": "#0b7a5d",
+  "theme_color": "#0b7a5d",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icon-512.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icon-512-maskable.png",
+      "src": "icon-512-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
