@@ -31,9 +31,9 @@
 <meta name="twitter:description" content="Create a free static QR code from any link or text — no signup required, no expiry. Customize colors, download PNG or SVG.">
 <meta name="twitter:image" content="https://qrcodenosignup.com/og-image.png">
 
-<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<script src="https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.prod.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
 
 <!-- Google Analytics — replace G-XXXXXXXXXX with your real GA4 Measurement ID -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
@@ -123,7 +123,7 @@
     --ink: #10201c;
     --ink-soft: #55645f;
     --line: #d7ddda;
-    --signal: #0f9d78;
+    --signal: #0b7a5d;
     --pop: #ffd166;
     --pop-2: #ff6b6b;
     --danger: #c4453e;
@@ -296,7 +296,7 @@
     margin-top: var(--space-7);
     padding-top: var(--space-4);
     border-top: 1px solid rgba(255,255,255,.25);
-    color: rgba(255,255,255,.75);
+    color: #ffffff;
     font-size: var(--text-sm);
     text-align:center;
   }
@@ -524,6 +524,7 @@
 
 <div id="app">
   <div class="wrap">
+    <main>
     <h1>Free QR code generator <span class="pop-word">no signup required</span></h1>
     <p class="lede">Paste a link or type any text and get a scannable QR code in seconds.<br>No account required — and <a href="#faq-privacy" class="lede-link">we never see what you type</a>.</p>
 
@@ -705,6 +706,7 @@
         </div>
       </div>
     </section>
+    </main>
 
     <footer>
       <p>Free static QR code generator — no signup required, no expiry. Codes are generated locally in your browser.</p>

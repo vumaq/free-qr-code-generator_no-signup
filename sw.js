@@ -1,11 +1,11 @@
-const CACHE_NAME = 'qr-generator-v1';
+const CACHE_NAME = 'qr-generator-v2';
 const ASSETS = [
   '/',
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png',
-  'https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js',
+  'https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.prod.js',
+  'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js',
 ];
 
 self.addEventListener('install', (event) => {
