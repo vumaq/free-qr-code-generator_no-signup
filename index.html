@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Free QR Code Generator — No Signup Required</title>
-<meta name="description" content="Create a QR code from any link or text — free, no signup required. Custom colors, PNG or SVG download, all in your browser.">
+<title>Free QR Code Generator — No Signup Required, No Expiry</title>
+<meta name="description" content="Create a free static QR code from any link or text — no signup required, no expiry. Customize colors, download PNG or SVG, and generate privately in your browser.">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0f9d78">
 <link rel="manifest" href="/manifest.json">
@@ -16,19 +16,21 @@
 <link rel="canonical" href="https://qrcodenosignup.com/">
 
 <meta property="og:site_name" content="Free QR Code Generator">
-<meta property="og:title" content="Free QR Code Generator — No Signup Required">
-<meta property="og:description" content="Create a QR code from any link or text — free, no signup required. Custom colors, PNG or SVG download.">
+<meta property="og:title" content="Free QR Code Generator — No Signup Required, No Expiry">
+<meta property="og:description" content="Create a free static QR code from any link or text — no signup required, no expiry. Customize colors, download PNG or SVG.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://qrcodenosignup.com/">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://qrcodenosignup.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Free QR Code Generator — No Signup Required, No Expiry">
 
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Free QR Code Generator — No Signup Required">
-<meta name="twitter:description" content="Create a QR code from any link or text — free, no signup required. Custom colors, PNG or SVG download.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Free QR Code Generator — No Signup Required, No Expiry">
+<meta name="twitter:description" content="Create a free static QR code from any link or text — no signup required, no expiry. Customize colors, download PNG or SVG.">
+<meta name="twitter:image" content="https://qrcodenosignup.com/og-image.png">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
 
@@ -96,6 +98,16 @@
       "@type": "Question",
       "name": "Will a custom color QR code still scan properly?",
       "acceptedAnswer": { "@type": "Answer", "text": "Usually, yes, as long as there's strong contrast between the foreground and background colors. The generator warns you if your chosen colors are too close in contrast to scan reliably." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this a static or dynamic QR code?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Static. Your link or text is encoded directly into the code itself, rather than pointing to a redirect service. That's what makes it work forever with no subscription and no expiry — but it also means the code can't be edited or redirected after you've printed it." }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use these QR codes commercially?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. There's no license or attribution required — use them on packaging, menus, posters, or anywhere else you need." }
     }
   ]
 }
@@ -116,9 +128,9 @@
     --danger: #c4453e;
 
     /* ---- Font tokens ---- */
-    --font-heading: 'Plus Jakarta Sans', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    --font-body: 'Inter', sans-serif;
+    --font-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Roboto, sans-serif;
+    --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Roboto, sans-serif;
 
     /* ---- Type scale ---- */
     --text-2xs: 11.5px;
@@ -200,10 +212,22 @@
   .lede{
     color: #ffffff;
     max-width: 90ch;
-    margin: 0 auto var(--space-2);
+    margin: 0 auto var(--space-6);
     text-align:center;
     line-height:1.5;
     font-size: var(--text-lg);
+  }
+  .lede-link{
+    color: #ffffff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1.5px;
+    text-decoration-color: rgba(255,255,255,.55);
+  }
+  .lede-link:hover{ text-decoration-color: #ffffff; }
+  html{ scroll-behavior: smooth; }
+  .faq-item:target{
+    background: var(--bg);
   }
 
   .content-section{ margin-top: var(--space-7); }
@@ -307,6 +331,7 @@
   }
   .field-label-row .field-label{ margin-bottom:0; }
   .field > .field-label{ margin-bottom: var(--space-2); }
+  .label-group{ display:flex; align-items:center; gap: var(--space-2); }
 
   .contrast-warning{
     font-family: var(--font-mono);
@@ -498,8 +523,8 @@
 
 <div id="app">
   <div class="wrap">
-    <h1>Free QR code generator <span class="pop-word">no signup</span></h1>
-    <p class="lede">Paste a link or type any text and get a scannable QR code in seconds.<br>No account — everything stays private in your browser.</p>
+    <h1>Free QR code generator <span class="pop-word">no signup required</span></h1>
+    <p class="lede">Paste a link or type any text and get a scannable QR code in seconds.<br>No account required — and <a href="#faq-privacy" class="lede-link">we never see what you type</a>.</p>
 
     <div class="layout">
       <!-- Controls -->
@@ -514,7 +539,7 @@
         </div>
 
         <div class="field">
-          <label class="field-label" id="ec-label">Error correction</label>
+          <label class="field-label" id="ec-label">Error Correction</label>
           <div class="seg" role="group" aria-labelledby="ec-label">
             <button
               v-for="level in ecLevels"
@@ -554,9 +579,11 @@
 
         <div class="field">
           <div class="field-label-row">
-            <label class="field-label">Colors</label>
+            <span class="label-group">
+              <label class="field-label">Colors</label>
+              <button type="button" class="reset-link" @click="resetColors">Reset</button>
+            </span>
             <span v-if="lowContrast" class="contrast-warning">⚠ Low contrast</span>
-            <button type="button" class="reset-link" @click="resetColors">Reset</button>
           </div>
           <div class="swatch-row">
             <label class="swatch" for="fg-color">
@@ -574,11 +601,9 @@
       <!-- Preview -->
       <div class="preview card radius-lg">
         <div class="readout">
-          <span>VERSION <b>{{ matrix ? matrix.version : '—' }}</b></span>
-          <span>MODULES <b>{{ matrix ? matrix.count + '×' + matrix.count : '—' }}</b></span>
-          <span>LEVEL <b>{{ ecLevel }}</b></span>
-          <span>PADDING <b>{{ quietZone }}</b></span>
+          <span>ERROR CORRECTION <b>{{ ecLevelLabel }}</b></span>
           <span>SIZE <b>{{ printSize }}px</b></span>
+          <span>PADDING <b>{{ quietZone }}</b></span>
         </div>
         <div class="qr-wrap" role="img" aria-label="Generated QR code preview">
           <div v-if="!text.trim()" class="empty-state"><span>Your code will appear here</span></div>
@@ -625,7 +650,7 @@
         </div>
         <div class="feature-card card radius-md">
           <h3>Codes never expire</h3>
-          <p>Each code is generated directly from your text, with no tracking redirect behind it, so there's nothing that can expire or get shut off later.</p>
+          <p>This is a static QR code — your text is baked directly into it, with no tracking redirect behind it, so there's nothing that can expire or get shut off later.</p>
         </div>
         <div class="feature-card card radius-md">
           <h3>Private by design</h3>
@@ -653,7 +678,7 @@
           <h3>Is this QR code generator really free?</h3>
           <p>Yes. There are no signups, no paywall, and no limit on how many codes you can create or download.</p>
         </div>
-        <div class="faq-item">
+        <div class="faq-item" id="faq-privacy">
           <h3>Is my data uploaded anywhere?</h3>
           <p>No. The QR code is generated entirely in your browser using JavaScript. What you type is never sent to a server.</p>
         </div>
@@ -669,11 +694,19 @@
           <h3>Will a custom color QR code still scan properly?</h3>
           <p>Usually, yes, as long as there's strong contrast between the foreground and background colors. The generator warns you if your chosen colors are too close in contrast to scan reliably.</p>
         </div>
+        <div class="faq-item">
+          <h3>Is this a static or dynamic QR code?</h3>
+          <p>Static. Your link or text is encoded directly into the code itself, rather than pointing to a redirect service. That's what makes it work forever with no subscription and no expiry — but it also means the code can't be edited or redirected after you've printed it.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Can I use these QR codes commercially?</h3>
+          <p>Yes. There's no license or attribution required — use them on packaging, menus, posters, or anywhere else you need.</p>
+        </div>
       </div>
     </section>
 
     <footer>
-      <p>Free QR code generator — no signup. Codes are generated locally in your browser.</p>
+      <p>Free static QR code generator — no signup required, no expiry. Codes are generated locally in your browser.</p>
     </footer>
   </div>
 </div>
@@ -704,6 +737,11 @@ createApp({
       { value: 'Q', label: 'Strong' },
       { value: 'H', label: 'Max' },
     ];
+
+    const ecLevelLabel = computed(() => {
+      const found = ecLevels.find(l => l.value === ecLevel.value);
+      return found ? found.label : ecLevel.value;
+    });
 
     const paddingOptions = [
       { value: 0, label: 'None' },
@@ -880,7 +918,7 @@ createApp({
     }
 
     return {
-      text, ecLevel, ecLevels, printSize, sizeOptions, quietZone, paddingOptions, inkColor, paperColor,
+      text, ecLevel, ecLevels, ecLevelLabel, printSize, sizeOptions, quietZone, paddingOptions, inkColor, paperColor,
       error, matrix, svgMarkup, canDownload, showScan, printKey, copied, lowContrast,
       downloadPNG, downloadSVG, copyToClipboard, resetColors,
     };
