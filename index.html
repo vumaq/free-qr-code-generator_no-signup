@@ -3,22 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Free QR Code Generator — No Signup, No Expiry</title>
-<meta name="description" content="Create a QR code from any link or text — free, no signup, codes that never expire. Custom colors, PNG or SVG download, all in your browser.">
+<title>Free QR Code Generator — No Signup Required</title>
+<meta name="description" content="Create a QR code from any link or text — free, no signup required. Custom colors, PNG or SVG download, all in your browser.">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0f9d78">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="QR Generator">
 <link rel="canonical" href="https://qrcodenosignup.com/">
 
 <meta property="og:site_name" content="Free QR Code Generator">
-<meta property="og:title" content="Free QR Code Generator — No Signup, No Expiry">
-<meta property="og:description" content="Create a QR code from any link or text — free, no signup, codes that never expire. Custom colors, PNG or SVG download.">
+<meta property="og:title" content="Free QR Code Generator — No Signup Required">
+<meta property="og:description" content="Create a QR code from any link or text — free, no signup required. Custom colors, PNG or SVG download.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://qrcodenosignup.com/">
 <meta property="og:locale" content="en_US">
 
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Free QR Code Generator — No Signup, No Expiry">
-<meta name="twitter:description" content="Create a QR code from any link or text — free, no signup, codes that never expire. Custom colors, PNG or SVG download.">
+<meta name="twitter:title" content="Free QR Code Generator — No Signup Required">
+<meta name="twitter:description" content="Create a QR code from any link or text — free, no signup required. Custom colors, PNG or SVG download.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,13 +32,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
 
+<!-- Google Analytics — replace G-XXXXXXXXXX with your real GA4 Measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Free QR Code Generator",
   "url": "https://qrcodenosignup.com/",
-  "description": "Create a QR code from any link or text free, with no signup, and codes that never expire. Choose custom colors and padding, then download as PNG or SVG.",
+  "description": "Create a QR code from any link or text free, with no signup required. Choose custom colors and padding, then download as PNG or SVG.",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Any (runs in browser)",
   "offers": {
@@ -47,6 +62,7 @@
     "Adjustable quiet zone / padding",
     "Adjustable error correction level",
     "Download as PNG or SVG",
+    "Copy the code directly to your clipboard",
     "Runs entirely in the browser — no data uploaded"
   ]
 }
@@ -63,11 +79,6 @@
     },
     {
       "@type": "Question",
-      "name": "Do the QR codes expire or stop working?",
-      "acceptedAnswer": { "@type": "Answer", "text": "No. The code is generated directly from your text or link, with no tracking redirect involved, so there's no service that can expire or deactivate it later." }
-    },
-    {
-      "@type": "Question",
       "name": "Is my data uploaded anywhere?",
       "acceptedAnswer": { "@type": "Answer", "text": "No. The QR code is generated entirely in your browser using JavaScript. What you type is never sent to a server." }
     },
@@ -79,12 +90,12 @@
     {
       "@type": "Question",
       "name": "Can I download the QR code as SVG instead of PNG?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Both formats are available. SVG is a good choice for printing at large sizes since it stays sharp at any scale." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Both formats are available, plus a one-click copy to your clipboard. SVG is a good choice for printing at large sizes since it stays sharp at any scale." }
     },
     {
       "@type": "Question",
       "name": "Will a custom color QR code still scan properly?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Usually, yes, as long as there's strong contrast between the foreground and background colors. Very light foreground colors or low-contrast combinations can make a code harder for some scanners to read." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Usually, yes, as long as there's strong contrast between the foreground and background colors. The generator warns you if your chosen colors are too close in contrast to scan reliably." }
     }
   ]
 }
@@ -93,38 +104,88 @@
 
 <style>
   :root{
+    /* ---- Color tokens ---- */
     --bg: #eef1f0;
     --panel: #ffffff;
     --ink: #10201c;
     --ink-soft: #55645f;
     --line: #d7ddda;
     --signal: #0f9d78;
-    --signal-dim: #0f9d7822;
     --pop: #ffd166;
     --pop-2: #ff6b6b;
+    --danger: #c4453e;
+
+    /* ---- Font tokens ---- */
+    --font-heading: 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-body: 'Inter', sans-serif;
+
+    /* ---- Type scale ---- */
+    --text-2xs: 11.5px;
+    --text-xs: 12px;
+    --text-sm: 13.5px;
+    --text-base: 15px;
+    --text-md: 16.5px;
+    --text-lg: 19px;
+    --text-xl: 27px;
+    --text-2xl: clamp(28px, 3.2vw, 36px);
+
+    /* ---- Spacing scale ---- */
+    --space-1: 6px;
+    --space-2: 10px;
+    --space-3: 14px;
+    --space-4: 18px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 56px;
+
+    /* ---- Radius scale ---- */
+    --radius-xs: 6px;
+    --radius-sm: 8px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 18px;
+    --radius-full: 999px;
+
+    /* ---- Border / shadow tokens ---- */
+    --border-w: 2px;
+    --border: var(--border-w) solid var(--ink);
+    --shadow-sm: 4px 4px 0 rgba(16,32,28,.2);
+    --shadow-md: 6px 6px 0 rgba(16,32,28,.22);
   }
   *{box-sizing:border-box;}
   html, body{ height:100%; margin:0; }
   body{ background: var(--signal); }
+
   #app{
-    font-family:'Inter', sans-serif;
+    font-family: var(--font-body);
     background: var(--signal);
     color: var(--ink);
     min-height:100vh;
-    padding: 28px 20px;
+    padding: var(--space-5) var(--space-2);
     display:flex;
     align-items:center;
     justify-content:center;
   }
   .wrap{ width:100%; max-width: 1120px; }
 
+  /* ---- Shared card style ---- */
+  .card{
+    background: var(--panel);
+    border: var(--border);
+    box-shadow: var(--shadow-md);
+  }
+  .radius-md{ border-radius: var(--radius-lg); }
+  .radius-lg{ border-radius: var(--radius-xl); }
+
+  /* ---- Header ---- */
   h1{
-    font-family:'Plus Jakarta Sans', sans-serif;
+    font-family: var(--font-heading);
     font-weight:700;
-    font-size: clamp(22px, 2.6vw, 28px);
+    font-size: clamp(26px, 3vw, 32px);
     letter-spacing:-0.01em;
     color: #ffffff;
-    margin: 0 0 8px;
+    margin: 0 0 var(--space-1);
     text-align:center;
   }
   .pop-word{
@@ -132,198 +193,175 @@
     background: var(--pop);
     padding: 4px 8px 6px;
     line-height:1.3;
-    border-radius: 6px;
+    border-radius: var(--radius-xs);
     display:inline-block;
     transform: rotate(-2deg);
   }
   .lede{
-    color: rgba(255,255,255,.88);
+    color: #ffffff;
     max-width: 90ch;
-    margin-left:auto;
-    margin-right:auto;
+    margin: 0 auto var(--space-2);
     text-align:center;
     line-height:1.5;
-    font-size: 17px;
-    margin-bottom: 20px;
+    font-size: var(--text-lg);
   }
 
-  .content-section{
-    margin-top: 56px;
-  }
+  .content-section{ margin-top: var(--space-7); }
   .content-section h2{
-    font-family:'Plus Jakarta Sans', sans-serif;
+    font-family: var(--font-heading);
     font-weight:600;
-    font-size: 25px;
+    font-size: var(--text-xl);
     color: #ffffff;
-    margin: 0 0 18px;
+    margin: 0 0 var(--space-4);
   }
-  .feature-grid{
+
+  .feature-grid, .steps-list{
     display:grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
+    gap: var(--space-3);
+    list-style:none;
+    margin:0; padding:0;
   }
   @media (max-width: 760px){
-    .feature-grid{ grid-template-columns: 1fr; }
+    .feature-grid, .steps-list{ grid-template-columns: 1fr; }
   }
-  .feature-card{
-    background: var(--panel);
-    border: 2px solid var(--ink);
-    border-radius: 14px;
-    padding: 18px 20px;
-    box-shadow: 4px 4px 0 rgba(16,32,28,.2);
+  .feature-card, .steps-list li{
+    padding: var(--space-4) var(--space-4);
   }
-  .feature-card h3{
-    font-family:'Plus Jakarta Sans', sans-serif;
-    font-size:16.5px;
+  .feature-card h3, .steps-list h3, .faq-item h3{
+    font-family: var(--font-heading);
+    font-size: var(--text-md);
     font-weight:600;
     color: var(--ink);
     margin: 0 0 6px;
   }
-  .feature-card p{
-    font-size:14.5px;
+  .feature-card p, .steps-list p{
+    font-size: var(--text-sm);
     line-height:1.5;
     color: var(--ink-soft);
     margin:0;
   }
-
-  .steps-list{
-    list-style:none;
-    margin:0; padding:0;
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-  }
-  @media (max-width: 760px){
-    .steps-list{ grid-template-columns: 1fr; }
-  }
-  .steps-list li{
-    background: var(--panel);
-    border: 2px solid var(--ink);
-    border-radius: 14px;
-    padding: 18px 20px;
-    box-shadow: 4px 4px 0 rgba(16,32,28,.2);
-  }
   .step-num{
-    font-family:'JetBrains Mono', monospace;
-    font-size: 12px;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
     font-weight:600;
     letter-spacing:.1em;
     color: var(--ink);
     background: var(--pop);
     display:inline-block;
     padding: 3px 9px;
-    border-radius: 999px;
-    margin-bottom: 10px;
-  }
-  .steps-list h3{
-    font-family:'Plus Jakarta Sans', sans-serif;
-    font-size:16.5px;
-    font-weight:600;
-    color: var(--ink);
-    margin: 0 0 6px;
-  }
-  .steps-list p{
-    font-size:14.5px;
-    line-height:1.5;
-    color: var(--ink-soft);
-    margin:0;
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-2);
   }
 
-  .faq{
-    background: var(--panel);
-    border: 2px solid var(--ink);
-    border-radius: 18px;
-    box-shadow: 6px 6px 0 rgba(16,32,28,.2);
-    overflow:hidden;
-  }
+  .faq{ overflow:hidden; }
   .faq-item{
-    padding: 18px 22px;
+    padding: var(--space-4) 22px;
     border-bottom: 1px solid var(--bg);
   }
   .faq-item:last-child{ border-bottom:none; }
-  .faq-item h3{
-    font-family:'Plus Jakarta Sans', sans-serif;
-    font-size:16.5px;
-    font-weight:600;
-    color: var(--ink);
-    margin: 0 0 6px;
-  }
   .faq-item p{
-    font-size:15px;
+    font-size: var(--text-base);
     line-height:1.55;
     color: var(--ink-soft);
     margin:0;
   }
 
   footer{
-    margin-top: 56px;
-    padding-top: 22px;
+    margin-top: var(--space-7);
+    padding-top: var(--space-4);
     border-top: 1px solid rgba(255,255,255,.25);
     color: rgba(255,255,255,.75);
-    font-size: 13.5px;
+    font-size: var(--text-sm);
+    text-align:center;
   }
 
   .layout{
     display:grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    gap: var(--space-5);
     align-items:start;
   }
   @media (max-width: 760px){
     .layout{ grid-template-columns: 1fr; }
   }
 
-  /* ---- Controls (left) ---- */
-  .panel{
-    background: var(--panel);
-    border: 2px solid var(--ink);
-    border-radius: 18px;
-    padding: 26px;
-    box-shadow: 6px 6px 0 rgba(16,32,28,.22);
-  }
-  .field{ margin-bottom: 24px; }
+  .panel, .preview{ padding: var(--space-5); }
+
+  .field{ margin-bottom: var(--space-5); }
   .field:last-child{ margin-bottom:0; }
+  .field-label-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
+  }
   .field-label{
     display:block;
-    font-family:'JetBrains Mono', monospace;
-    font-size: 12px;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
     letter-spacing:.1em;
     text-transform:uppercase;
     color: var(--ink-soft);
-    margin-bottom: 10px;
   }
+  .field-label-row .field-label{ margin-bottom:0; }
+  .field > .field-label{ margin-bottom: var(--space-2); }
+
+  .contrast-warning{
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    color: var(--danger);
+    white-space:nowrap;
+  }
+  .reset-link{
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    letter-spacing:.05em;
+    color: var(--ink-soft);
+    background:none;
+    border:none;
+    padding:0;
+    cursor:pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    white-space:nowrap;
+  }
+  .reset-link:hover{ color: var(--ink); }
+
   textarea{
     width:100%;
     min-height: 84px;
     resize:vertical;
-    background: var(--bg);
-    border: 1px solid var(--line);
-    border-radius: 6px;
+    background: var(--panel);
+    border: var(--border);
+    border-radius: var(--radius-xs);
     color: var(--ink);
-    font-family:'JetBrains Mono', monospace;
-    font-size: 15px;
-    padding: 12px;
+    font-family: var(--font-mono);
+    font-size: var(--text-base);
+    padding: var(--space-2) var(--space-3);
     outline:none;
+    transition: box-shadow .15s;
   }
-  textarea:focus{ border-color: var(--signal); }
+  textarea:focus{ box-shadow: 0 0 0 3px rgba(255,209,102,.5); }
   textarea::placeholder{ color:#93a29c; }
 
   .seg{
     display:flex;
-    border: 2px solid var(--ink);
-    border-radius: 10px;
+    border: var(--border);
+    border-radius: var(--radius-md);
     overflow:hidden;
   }
   .seg button{
     flex:1;
-    font-family:'JetBrains Mono', monospace;
-    font-size:13.5px;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
     padding: 9px 6px;
     border:none;
     background: var(--panel);
     color: var(--ink-soft);
     cursor:pointer;
-    border-right: 2px solid var(--ink);
+    border-right: var(--border);
     transition: background .15s, color .15s;
   }
   .seg button:last-child{ border-right:none; }
@@ -332,14 +370,11 @@
     color: var(--ink);
     font-weight:600;
   }
-  .seg button:focus-visible{ outline: 2px solid var(--signal); outline-offset:-2px; }
-
-  input[type="range"]{ width:100%; accent-color: var(--signal); }
-  .size-readout{
-    font-family:'JetBrains Mono', monospace;
-    font-size:12.5px;
-    color: var(--ink-soft);
-    margin-top:6px;
+  .seg button:focus-visible{
+    outline: 3px solid var(--pop);
+    outline-offset: 2px;
+    position:relative;
+    z-index:1;
   }
 
   .swatch-row{ display:flex; align-items:center; gap:20px; flex-wrap:nowrap; }
@@ -347,8 +382,8 @@
   .swatch-box{
     display:inline-flex;
     width:28px; height:28px;
-    border:2px solid var(--ink);
-    border-radius:8px;
+    border: var(--border);
+    border-radius: var(--radius-sm);
     overflow:hidden;
   }
   .swatch-box input[type="color"]{
@@ -358,34 +393,26 @@
     cursor:pointer;
   }
   .swatch span.label{
-    font-family:'JetBrains Mono', monospace;
-    font-size:13px;
+    font-family: var(--font-mono);
+    font-size: var(--text-base);
     line-height:1;
     color: var(--ink-soft);
   }
   .swatch-box input[type="color"]::-webkit-color-swatch-wrapper{ padding:0; }
   .swatch-box input[type="color"]::-webkit-color-swatch{ border:none; }
 
-  /* ---- Preview (right) ---- */
-  .preview{
-    background: var(--panel);
-    border: 2px solid var(--ink);
-    border-radius: 18px;
-    padding: 26px;
-    box-shadow: 6px 6px 0 rgba(16,32,28,.22);
-  }
   .readout{
     display:flex;
     flex-wrap:wrap;
     justify-content:space-between;
     row-gap:6px;
-    column-gap:14px;
-    font-family:'JetBrains Mono', monospace;
-    font-size: 11.5px;
+    column-gap: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
     letter-spacing:.08em;
     color: var(--ink-soft);
-    margin-bottom: 14px;
-    padding-bottom: 12px;
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
     border-bottom: 1px dashed var(--line);
   }
   .readout b{ color: var(--ink); font-weight:600; }
@@ -396,10 +423,17 @@
     max-width: 420px;
     margin: 0 auto;
     aspect-ratio: 1/1;
-    border-radius: 12px;
+    border-radius: 0;
     overflow:hidden;
-    background: var(--qr-paper, #ffffff);
-    border: 2px solid var(--ink);
+    border: var(--border);
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(45deg, var(--line) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--line) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--line) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--line) 75%);
+    background-size: 24px 24px;
+    background-position: 0 0, 0 12px, 12px -12px, -12px 0;
   }
   .qr-wrap svg{ display:block; width:100%; height:100%; }
   .scanline{
@@ -415,23 +449,30 @@
   .empty-state{
     position:absolute; inset:0;
     display:flex; align-items:center; justify-content:center;
-    text-align:center; padding: 24px;
-    font-family:'JetBrains Mono', monospace;
-    font-size: 13.5px;
-    color: #93a29c;
+    text-align:center; padding: var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--ink-soft);
+  }
+  .empty-state span{
+    background: var(--panel);
+    border: var(--border);
+    border-radius: var(--radius-xs);
+    padding: var(--space-2) var(--space-3);
   }
 
-  .downloads{ display:flex; gap:10px; margin-top:18px; max-width:420px; margin-left:auto; margin-right:auto; }
+  .downloads{ display:flex; flex-wrap:wrap; gap:10px; margin-top: var(--space-4); max-width:420px; margin-left:auto; margin-right:auto; }
   .dl-btn{
     flex:1;
-    font-family:'Plus Jakarta Sans', sans-serif;
+    min-width: 120px;
+    font-family: var(--font-heading);
     font-weight:600;
-    font-size:15px;
+    font-size: var(--text-base);
     color: var(--ink);
     background: var(--pop);
-    border: 2px solid var(--ink);
+    border: var(--border);
     padding: 11px 12px;
-    border-radius:10px;
+    border-radius: var(--radius-md);
     cursor:pointer;
     box-shadow: 3px 3px 0 rgba(16,32,28,.3);
     transition: background .15s, transform .1s, box-shadow .1s;
@@ -442,10 +483,10 @@
   .dl-btn:focus-visible{ outline: 2px solid var(--signal); outline-offset:2px; }
 
   .error-msg{
-    font-family:'JetBrains Mono', monospace;
-    font-size:13px;
-    color:#c4453e;
-    margin-top:10px;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--danger);
+    margin-top: var(--space-2);
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -458,16 +499,16 @@
 <div id="app">
   <div class="wrap">
     <h1>Free QR code generator <span class="pop-word">no signup</span></h1>
-    <p class="lede">Paste a link or type any text and get a scannable QR code in seconds.<br>No account, no expiry — everything stays private in your browser.</p>
+    <p class="lede">Paste a link or type any text and get a scannable QR code in seconds.<br>No account — everything stays private in your browser.</p>
 
     <div class="layout">
       <!-- Controls -->
-      <div class="panel">
+      <div class="panel card radius-lg">
         <div class="field">
           <label class="field-label" for="qr-text">Content</label>
           <textarea
             id="qr-text"
-            v-model="text"
+            @input="text = $event.target.value"
             placeholder="https://example.com — or any text"
           ></textarea>
         </div>
@@ -512,14 +553,18 @@
         </div>
 
         <div class="field">
-          <label class="field-label">Colors</label>
+          <div class="field-label-row">
+            <label class="field-label">Colors</label>
+            <span v-if="lowContrast" class="contrast-warning">⚠ Low contrast</span>
+            <button type="button" class="reset-link" @click="resetColors">Reset</button>
+          </div>
           <div class="swatch-row">
-            <label class="swatch">
-              <span class="swatch-box"><input type="color" v-model="inkColor" aria-label="Foreground color"></span>
+            <label class="swatch" for="fg-color">
+              <span class="swatch-box"><input id="fg-color" type="color" v-model="inkColor" aria-label="Foreground color"></span>
               <span class="label">Foreground</span>
             </label>
-            <label class="swatch">
-              <span class="swatch-box"><input type="color" v-model="paperColor" aria-label="Background color"></span>
+            <label class="swatch" for="bg-color">
+              <span class="swatch-box"><input id="bg-color" type="color" v-model="paperColor" aria-label="Background color"></span>
               <span class="label">Background</span>
             </label>
           </div>
@@ -527,7 +572,7 @@
       </div>
 
       <!-- Preview -->
-      <div class="preview">
+      <div class="preview card radius-lg">
         <div class="readout">
           <span>VERSION <b>{{ matrix ? matrix.version : '—' }}</b></span>
           <span>MODULES <b>{{ matrix ? matrix.count + '×' + matrix.count : '—' }}</b></span>
@@ -535,77 +580,78 @@
           <span>PADDING <b>{{ quietZone }}</b></span>
           <span>SIZE <b>{{ printSize }}px</b></span>
         </div>
-        <div class="qr-wrap" role="img" aria-label="Generated QR code preview" :style="{ '--qr-paper': paperColor }">
-          <div v-if="!text.trim()" class="empty-state">Your code will appear here</div>
-          <div v-else-if="error" class="empty-state">{{ error }}</div>
+        <div class="qr-wrap" role="img" aria-label="Generated QR code preview">
+          <div v-if="!text.trim()" class="empty-state"><span>Your code will appear here</span></div>
+          <div v-else-if="error" class="empty-state"><span>{{ error }}</span></div>
           <div v-else v-html="svgMarkup" :key="printKey"></div>
           <div v-if="showScan" class="scanline"></div>
         </div>
         <div class="downloads">
           <button class="dl-btn" :disabled="!canDownload" @click="downloadPNG">Download PNG</button>
           <button class="dl-btn" :disabled="!canDownload" @click="downloadSVG">Download SVG</button>
+          <button class="dl-btn" :disabled="!canDownload" @click="copyToClipboard">{{ copied ? 'Copied!' : 'Copy to Clipboard' }}</button>
         </div>
         <div v-if="error" class="error-msg">{{ error }}</div>
       </div>
     </div>
 
-    <section class="content-section" aria-labelledby="features-h2">
-      <h2 id="features-h2">Why use this QR code generator</h2>
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h3>No signup required</h3>
-          <p>Generate as many codes as you like. There's no account to create and no email to hand over.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Codes never expire</h3>
-          <p>Each code is generated directly from your text, with no tracking redirect behind it, so there's nothing that can expire or get shut off later.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Private by design</h3>
-          <p>Generation happens entirely in your browser. What you type is never sent to a server.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Custom colors and padding</h3>
-          <p>Set your own foreground and background colors, and control how much quiet space surrounds the code.</p>
-        </div>
-        <div class="feature-card">
-          <h3>PNG or SVG export</h3>
-          <p>Download a raster PNG for quick use, or an SVG that stays sharp at any print size.</p>
-        </div>
-      </div>
-    </section>
-
     <section class="content-section" aria-labelledby="steps-h2">
       <h2 id="steps-h2">How to make a QR code online</h2>
       <ol class="steps-list">
-        <li>
+        <li class="card radius-md">
           <span class="step-num">STEP 1</span>
           <h3>Paste your link or text</h3>
           <p>Enter a URL, a Wi-Fi password, plain text, or anything else you want the code to hold.</p>
         </li>
-        <li>
+        <li class="card radius-md">
           <span class="step-num">STEP 2</span>
           <h3>Adjust the look</h3>
           <p>Pick an error correction level, set the padding, choose colors, and set the export size.</p>
         </li>
-        <li>
+        <li class="card radius-md">
           <span class="step-num">STEP 3</span>
           <h3>Download and use it</h3>
-          <p>Save it as a PNG or SVG and drop it straight into a poster, business card, or website.</p>
+          <p>Save it as a PNG or SVG, or copy it straight to your clipboard and paste it wherever you need it.</p>
         </li>
       </ol>
     </section>
 
+    <section class="content-section" aria-labelledby="features-h2">
+      <h2 id="features-h2">Why use this QR code generator</h2>
+      <div class="feature-grid">
+        <div class="feature-card card radius-md">
+          <h3>No signup required</h3>
+          <p>Generate as many codes as you like. There's no account to create and no email to hand over.</p>
+        </div>
+        <div class="feature-card card radius-md">
+          <h3>Codes never expire</h3>
+          <p>Each code is generated directly from your text, with no tracking redirect behind it, so there's nothing that can expire or get shut off later.</p>
+        </div>
+        <div class="feature-card card radius-md">
+          <h3>Private by design</h3>
+          <p>Generation happens entirely in your browser. What you type is never sent to a server.</p>
+        </div>
+        <div class="feature-card card radius-md">
+          <h3>Custom colors and padding</h3>
+          <p>Set your own foreground and background colors, and control how much quiet space surrounds the code.</p>
+        </div>
+        <div class="feature-card card radius-md">
+          <h3>Contrast checked</h3>
+          <p>A built-in warning flags color combinations that are too low-contrast to scan reliably.</p>
+        </div>
+        <div class="feature-card card radius-md">
+          <h3>PNG, SVG, or clipboard</h3>
+          <p>Download a raster PNG, an SVG that stays sharp at any print size, or copy it directly to paste elsewhere.</p>
+        </div>
+      </div>
+    </section>
+
     <section class="content-section" aria-labelledby="faq-h2">
       <h2 id="faq-h2">Frequently asked questions</h2>
-      <div class="faq">
+      <div class="faq card radius-lg">
         <div class="faq-item">
           <h3>Is this QR code generator really free?</h3>
           <p>Yes. There are no signups, no paywall, and no limit on how many codes you can create or download.</p>
-        </div>
-        <div class="faq-item">
-          <h3>Do the QR codes expire or stop working?</h3>
-          <p>No. The code is generated directly from your text or link, with no tracking redirect involved, so there's no service that can expire or deactivate it later.</p>
         </div>
         <div class="faq-item">
           <h3>Is my data uploaded anywhere?</h3>
@@ -617,17 +663,17 @@
         </div>
         <div class="faq-item">
           <h3>Can I download the QR code as SVG instead of PNG?</h3>
-          <p>Yes. Both formats are available. SVG is a good choice for printing at large sizes since it stays sharp at any scale.</p>
+          <p>Yes. Both formats are available, plus a one-click copy to your clipboard. SVG is a good choice for printing at large sizes since it stays sharp at any scale.</p>
         </div>
         <div class="faq-item">
           <h3>Will a custom color QR code still scan properly?</h3>
-          <p>Usually, yes, as long as there's strong contrast between the foreground and background colors. Very light foreground colors or low-contrast combinations can make a code harder for some scanners to read.</p>
+          <p>Usually, yes, as long as there's strong contrast between the foreground and background colors. The generator warns you if your chosen colors are too close in contrast to scan reliably.</p>
         </div>
       </div>
     </section>
 
     <footer>
-      <p>Free QR code generator — no signup, no expiry. Codes are generated locally in your browser.</p>
+      <p>Free QR code generator — no signup. Codes are generated locally in your browser.</p>
     </footer>
   </div>
 </div>
@@ -639,6 +685,8 @@ const { createApp, ref, computed, watch } = Vue;
 createApp({
   setup(){
     const text = ref('');
+    const debouncedText = ref('');
+    let debounceTimer = null;
     const ecLevel = ref('M');
     const printSize = ref(256);
     const sizeOptions = [64, 128, 256, 512, 1024];
@@ -648,6 +696,7 @@ createApp({
     const error = ref('');
     const showScan = ref(false);
     const printKey = ref(0);
+    const copied = ref(false);
 
     const ecLevels = [
       { value: 'L', label: 'Low' },
@@ -663,9 +712,46 @@ createApp({
       { value: 3, label: 'Large' },
     ];
 
+    function resetColors(){
+      inkColor.value = '#10201c';
+      paperColor.value = '#ffffff';
+    }
+
+    function hexToRgb(hex){
+      const h = hex.replace('#', '');
+      return {
+        r: parseInt(h.substring(0,2), 16),
+        g: parseInt(h.substring(2,4), 16),
+        b: parseInt(h.substring(4,6), 16),
+      };
+    }
+
+    function relLuminance(hex){
+      const { r, g, b } = hexToRgb(hex);
+      const [rl, gl, bl] = [r, g, b].map(c => {
+        c /= 255;
+        return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * rl + 0.7152 * gl + 0.0722 * bl;
+    }
+
+    function contrastRatio(hexA, hexB){
+      const la = relLuminance(hexA), lb = relLuminance(hexB);
+      const lighter = Math.max(la, lb), darker = Math.min(la, lb);
+      return (lighter + 0.05) / (darker + 0.05);
+    }
+
+    const lowContrast = computed(() => {
+      try {
+        return contrastRatio(inkColor.value, paperColor.value) < 3;
+      } catch (e) {
+        return false;
+      }
+    });
+
     const matrix = computed(() => {
       error.value = '';
-      const value = text.value.trim();
+      const value = debouncedText.value.trim();
       if (!value) return null;
       try {
         const qr = qrcode(0, ecLevel.value);
@@ -704,13 +790,56 @@ createApp({
 
     const canDownload = computed(() => !!matrix.value && !error.value);
 
-    watch(text, (newVal, oldVal) => {
+    watch(text, (newVal) => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        debouncedText.value = newVal;
+      }, 150);
+    });
+
+    watch(debouncedText, (newVal, oldVal) => {
       if (newVal.trim() && !oldVal.trim()){
         printKey.value++;
         showScan.value = false;
         requestAnimationFrame(() => { showScan.value = true; });
       }
     });
+
+    function renderToCanvas(onSuccess, onError){
+      const size = printSize.value;
+      const svgBlob = new Blob([svgMarkup.value], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(svgBlob);
+      const img = new Image();
+      // Set explicit dimensions before assigning src — older Safari can
+      // otherwise mis-size or drop the async decode for SVG data.
+      img.width = size;
+      img.height = size;
+      img.onload = () => {
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, size, size);
+          URL.revokeObjectURL(url);
+          canvas.toBlob((blob) => {
+            if (!blob) {
+              if (onError) onError();
+              return;
+            }
+            onSuccess(blob);
+          });
+        } catch (e) {
+          URL.revokeObjectURL(url);
+          if (onError) onError();
+        }
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        if (onError) onError();
+      };
+      img.src = url;
+    }
 
     function downloadSVG(){
       if (!canDownload.value) return;
@@ -725,35 +854,49 @@ createApp({
 
     function downloadPNG(){
       if (!canDownload.value) return;
-      const size = printSize.value;
-      const svgBlob = new Blob([svgMarkup.value], { type: 'image/svg+xml;charset=utf-8' });
-      const url = URL.createObjectURL(svgBlob);
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = size;
-        canvas.height = size;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, size, size);
-        URL.revokeObjectURL(url);
-        canvas.toBlob((blob) => {
-          const a = document.createElement('a');
-          a.href = URL.createObjectURL(blob);
-          a.download = 'qr-code.png';
-          a.click();
-        });
-      };
-      img.src = url;
+      renderToCanvas((blob) => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'qr-code.png';
+        a.click();
+      }, () => {
+        error.value = 'Could not render the PNG in this browser — try SVG instead.';
+      });
+    }
+
+    function copyToClipboard(){
+      if (!canDownload.value) return;
+      renderToCanvas(async (blob) => {
+        try {
+          await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+          copied.value = true;
+          setTimeout(() => { copied.value = false; }, 1500);
+        } catch (e) {
+          error.value = 'Clipboard copy is not supported in this browser.';
+        }
+      }, () => {
+        error.value = 'Could not render the image in this browser.';
+      });
     }
 
     return {
       text, ecLevel, ecLevels, printSize, sizeOptions, quietZone, paddingOptions, inkColor, paperColor,
-      error, matrix, svgMarkup, canDownload, showScan, printKey,
-      downloadPNG, downloadSVG,
+      error, matrix, svgMarkup, canDownload, showScan, printKey, copied, lowContrast,
+      downloadPNG, downloadSVG, copyToClipboard, resetColors,
     };
   }
 }).mount('#app');
 });
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => {
+        // Non-fatal — the app still works fully online without it.
+      });
+    });
+  }
 </script>
 
 </body>
