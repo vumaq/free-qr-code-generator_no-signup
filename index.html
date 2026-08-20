@@ -8,6 +8,7 @@
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0b7a5d">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
@@ -47,6 +48,9 @@
   "description": "Create a QR code from any link or text free, with no signup required. Choose custom colors and padding, then download as PNG or SVG.",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Any (runs in browser)",
+  "inLanguage": "en",
+  "datePublished": "2026-08-20",
+  "dateModified": "2026-08-20",
   "offers": {
     "@type": "Offer",
     "price": "0",
@@ -55,12 +59,41 @@
   "featureList": [
     "No signup or account required",
     "Codes never expire or get deactivated",
+    "Dedicated Wi-Fi network QR code preset",
+    "Dedicated contact card (vCard) QR code preset",
     "Custom foreground and background colors",
     "Adjustable quiet zone / padding",
     "Adjustable error correction level",
     "Download as PNG or SVG",
     "Copy the code directly to your clipboard",
     "Runs entirely in the browser — no data uploaded"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to make a QR code online",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Choose a type and add your content",
+      "text": "Pick Link/Text, Wi-Fi, or Contact Card, then fill in the details — a URL, your network name and password, or someone's contact info."
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Adjust the look",
+      "text": "Pick an error correction level, set the padding, choose colors, and set the export size."
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Download and use it",
+      "text": "Save it as a PNG or SVG, or copy it straight to your clipboard and paste it wherever you need it."
+    }
   ]
 }
 </script>
@@ -103,6 +136,21 @@
       "@type": "Question",
       "name": "Can I use these QR codes commercially?",
       "acceptedAnswer": { "@type": "Answer", "text": "Yes. There's no license or attribution required — use them on packaging, menus, posters, or anywhere else you need." }
+    },
+    {
+      "@type": "Question",
+      "name": "How much text can a QR code hold?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Up to about 4,296 alphanumeric characters, or around 7,089 digits, at the lowest error correction level. Longer text is possible but produces a denser, harder-to-scan code, and higher error correction levels reduce the capacity further." }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I make a QR code for Wi-Fi?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Select Wi-Fi from the type selector above the content box, then enter your network name and password. The correct format is generated for you automatically. Scanning the code will prompt most phones to join the network directly." }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I make a QR code for a contact card (vCard)?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Select Contact Card from the type selector and fill in a name, organization, phone, email, or website. Scanning the code prompts most phones to save the details directly to contacts." }
     }
   ]
 }
@@ -288,6 +336,15 @@
     color: var(--ink-soft);
     margin:0;
   }
+  .faq-item code{
+    font-family: inherit;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 1px 7px;
+    border-radius: var(--radius-xs);
+    font-size: 0.95em;
+    word-break: break-all;
+  }
 
   footer{
     margin-top: var(--space-7);
@@ -368,6 +425,36 @@
   }
   textarea:focus{ box-shadow: 0 0 0 3px rgba(255,209,102,.5); }
   textarea::placeholder{ color:#93a29c; }
+
+  .text-input{
+    width:100%;
+    background: var(--panel);
+    border: var(--border);
+    border-radius: var(--radius-xs);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    padding: var(--space-2) var(--space-3);
+    outline:none;
+    transition: box-shadow .15s;
+  }
+  .text-input:focus{ box-shadow: 0 0 0 3px rgba(255,209,102,.5); }
+  .text-input::placeholder{ color:#93a29c; }
+  .text-input:disabled{ background: var(--bg); color: var(--ink-soft); cursor:not-allowed; }
+
+  .checkbox-field label{
+    display:flex;
+    align-items:center;
+    gap: var(--space-2);
+    cursor:pointer;
+    font-size: var(--text-base);
+    color: var(--ink);
+  }
+  .checkbox-field input[type="checkbox"]{
+    width:18px; height:18px;
+    accent-color: var(--pop);
+    cursor:pointer;
+  }
 
   .seg{
     display:flex;
@@ -517,6 +604,19 @@
       <!-- Controls -->
       <div class="panel card radius-lg">
         <div class="field">
+          <label class="field-label" id="type-label">Type</label>
+          <div class="seg" role="group" aria-labelledby="type-label">
+            <button
+              v-for="t in contentTypes"
+              :key="t.value"
+              type="button"
+              :aria-pressed="contentType === t.value"
+              @click="contentType = t.value"
+            >{{ t.label }}</button>
+          </div>
+        </div>
+
+        <div class="field" v-if="contentType === 'text'">
           <label class="field-label" for="qr-text">Content</label>
           <textarea
             id="qr-text"
@@ -524,6 +624,71 @@
             placeholder="https://example.com — or any text"
           ></textarea>
         </div>
+
+        <template v-if="contentType === 'wifi'">
+          <div class="field">
+            <label class="field-label" for="wifi-ssid">Network Name</label>
+            <input
+              id="wifi-ssid"
+              type="text"
+              class="text-input"
+              @input="wifiSSID = $event.target.value"
+              placeholder="MyWiFiNetwork"
+            >
+          </div>
+          <div class="field">
+            <label class="field-label" for="wifi-password">Password</label>
+            <input
+              id="wifi-password"
+              type="text"
+              class="text-input"
+              @input="wifiPassword = $event.target.value"
+              placeholder="Leave blank for open networks"
+              :disabled="wifiSecurity === 'nopass'"
+            >
+          </div>
+          <div class="field">
+            <label class="field-label" id="wifi-sec-label">Security</label>
+            <div class="seg" role="group" aria-labelledby="wifi-sec-label">
+              <button
+                v-for="s in wifiSecurityOptions"
+                :key="s.value"
+                type="button"
+                :aria-pressed="wifiSecurity === s.value"
+                @click="wifiSecurity = s.value"
+              >{{ s.label }}</button>
+            </div>
+          </div>
+          <div class="field checkbox-field">
+            <label>
+              <input type="checkbox" :checked="wifiHidden" @change="wifiHidden = $event.target.checked">
+              <span>Hidden network</span>
+            </label>
+          </div>
+        </template>
+
+        <template v-if="contentType === 'contact'">
+          <div class="field">
+            <label class="field-label" for="contact-name">Full Name</label>
+            <input id="contact-name" type="text" class="text-input" @input="contactName = $event.target.value" placeholder="Jane Smith">
+          </div>
+          <div class="field">
+            <label class="field-label" for="contact-org">Organization</label>
+            <input id="contact-org" type="text" class="text-input" @input="contactOrg = $event.target.value" placeholder="Optional">
+          </div>
+          <div class="field">
+            <label class="field-label" for="contact-phone">Phone</label>
+            <input id="contact-phone" type="text" class="text-input" @input="contactPhone = $event.target.value" placeholder="Optional">
+          </div>
+          <div class="field">
+            <label class="field-label" for="contact-email">Email</label>
+            <input id="contact-email" type="text" class="text-input" @input="contactEmail = $event.target.value" placeholder="Optional">
+          </div>
+          <div class="field">
+            <label class="field-label" for="contact-url">Website</label>
+            <input id="contact-url" type="text" class="text-input" @input="contactUrl = $event.target.value" placeholder="Optional">
+          </div>
+        </template>
 
         <div class="field">
           <div class="field-label-row">
@@ -594,7 +759,7 @@
           <span>PADDING <b>{{ quietZone }}</b></span>
         </div>
         <div class="qr-wrap" role="img" aria-label="Generated QR code preview">
-          <div v-if="!text.trim()" class="empty-state"><span>Your code will appear here</span></div>
+          <div v-if="!qrPayload.trim()" class="empty-state"><span>Your code will appear here</span></div>
           <div v-else-if="error" class="empty-state"><span>{{ error }}</span></div>
           <div v-else v-html="svgMarkup"></div>
         </div>
@@ -612,8 +777,8 @@
       <ol class="steps-list">
         <li class="card radius-md">
           <span class="step-num">STEP 1</span>
-          <h3>Paste your link or text</h3>
-          <p>Enter a URL, a Wi-Fi password, plain text, or anything else you want the code to hold.</p>
+          <h3>Choose a type and add your content</h3>
+          <p>Pick Link/Text, Wi-Fi, or Contact Card, then fill in the details — a URL, your network name and password, or someone's contact info.</p>
         </li>
         <li class="card radius-md">
           <span class="step-num">STEP 2</span>
@@ -663,11 +828,11 @@
       <div class="faq card radius-lg">
         <div class="faq-item">
           <h3>Is this QR code generator really free?</h3>
-          <p>Yes. There are no signups, no paywall, and no limit on how many codes you can create or download.</p>
+          <p><strong>Yes.</strong> There are no signups, no paywall, and no limit on how many codes you can create or download.</p>
         </div>
         <div class="faq-item" id="faq-privacy">
           <h3>Is my data uploaded anywhere?</h3>
-          <p>No. The QR code is generated entirely in your browser using JavaScript. What you type is never sent to a server.</p>
+          <p><strong>No.</strong> The QR code is generated entirely in your browser using JavaScript. What you type is never sent to a server.</p>
         </div>
         <div class="faq-item" id="faq-correction">
           <h3>What is error correction, and which level should I use?</h3>
@@ -689,6 +854,18 @@
           <h3>Can I use these QR codes commercially?</h3>
           <p>Yes. There's no license or attribution required — use them on packaging, menus, posters, or anywhere else you need.</p>
         </div>
+        <div class="faq-item">
+          <h3>How much text can a QR code hold?</h3>
+          <p>Up to about <strong>4,296 alphanumeric characters</strong>, or around <strong>7,089 digits</strong>, at the lowest error correction level. Longer text is possible but produces a denser, harder-to-scan code, and higher error correction levels reduce the capacity further.</p>
+        </div>
+        <div class="faq-item">
+          <h3>How do I make a QR code for Wi-Fi?</h3>
+          <p>Select <strong>Wi-Fi</strong> from the type selector above the content box, then enter your network name and password. The correct format is generated for you automatically. Scanning the code will prompt most phones to join the network directly.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Can I make a QR code for a contact card (vCard)?</h3>
+          <p><strong>Yes.</strong> Select <strong>Contact Card</strong> from the type selector and fill in a name, organization, phone, email, or website. Scanning the code prompts most phones to save the details directly to contacts.</p>
+        </div>
       </div>
     </section>
     </main>
@@ -706,6 +883,29 @@ const { createApp, ref, computed } = Vue;
 createApp({
   setup(){
     const text = ref('');
+    const contentType = ref('text');
+    const contentTypes = [
+      { value: 'text', label: 'Link / Text' },
+      { value: 'wifi', label: 'Wi-Fi' },
+      { value: 'contact', label: 'Contact Card' },
+    ];
+
+    const wifiSSID = ref('');
+    const wifiPassword = ref('');
+    const wifiSecurity = ref('WPA');
+    const wifiHidden = ref(false);
+    const wifiSecurityOptions = [
+      { value: 'WPA', label: 'WPA/WPA2' },
+      { value: 'WEP', label: 'WEP' },
+      { value: 'nopass', label: 'None' },
+    ];
+
+    const contactName = ref('');
+    const contactOrg = ref('');
+    const contactPhone = ref('');
+    const contactEmail = ref('');
+    const contactUrl = ref('');
+
     const ecLevel = ref('M');
     const printSize = ref(256);
     const sizeOptions = [64, 128, 256, 512, 1024];
@@ -771,9 +971,36 @@ createApp({
       }
     });
 
+    function escapeWifi(s){
+      return (s || '').replace(/([\\;,"])/g, '\\$1');
+    }
+
+    const qrPayload = computed(() => {
+      if (contentType.value === 'wifi'){
+        if (!wifiSSID.value.trim()) return '';
+        const parts = [`WIFI:T:${wifiSecurity.value}`, `S:${escapeWifi(wifiSSID.value)}`];
+        if (wifiSecurity.value !== 'nopass'){
+          parts.push(`P:${escapeWifi(wifiPassword.value)}`);
+        }
+        if (wifiHidden.value) parts.push('H:true');
+        return parts.join(';') + ';;';
+      }
+      if (contentType.value === 'contact'){
+        if (!contactName.value.trim()) return '';
+        const lines = ['BEGIN:VCARD', 'VERSION:3.0', `FN:${contactName.value.trim()}`];
+        if (contactOrg.value.trim()) lines.push(`ORG:${contactOrg.value.trim()}`);
+        if (contactPhone.value.trim()) lines.push(`TEL:${contactPhone.value.trim()}`);
+        if (contactEmail.value.trim()) lines.push(`EMAIL:${contactEmail.value.trim()}`);
+        if (contactUrl.value.trim()) lines.push(`URL:${contactUrl.value.trim()}`);
+        lines.push('END:VCARD');
+        return lines.join('\n');
+      }
+      return text.value;
+    });
+
     const matrix = computed(() => {
       error.value = '';
-      const value = text.value.trim();
+      const value = qrPayload.value.trim();
       if (!value) return null;
       try {
         const qr = qrcode(0, ecLevel.value);
@@ -891,8 +1118,11 @@ createApp({
     }
 
     return {
-      text, ecLevel, ecLevels, ecLevelLabel, printSize, sizeOptions, quietZone, paddingOptions, inkColor, paperColor,
-      error, matrix, svgMarkup, canDownload, copied, lowContrast,
+      text, contentType, contentTypes,
+      wifiSSID, wifiPassword, wifiSecurity, wifiHidden, wifiSecurityOptions,
+      contactName, contactOrg, contactPhone, contactEmail, contactUrl,
+      ecLevel, ecLevels, ecLevelLabel, printSize, sizeOptions, quietZone, paddingOptions, inkColor, paperColor,
+      error, matrix, qrPayload, svgMarkup, canDownload, copied, lowContrast,
       downloadPNG, downloadSVG, copyToClipboard, resetColors,
     };
   }
