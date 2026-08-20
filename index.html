@@ -701,13 +701,11 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-const { createApp, ref, computed, watch } = Vue;
+const { createApp, ref, computed } = Vue;
 
 createApp({
   setup(){
     const text = ref('');
-    const debouncedText = ref('');
-    let debounceTimer = null;
     const ecLevel = ref('M');
     const printSize = ref(256);
     const sizeOptions = [64, 128, 256, 512, 1024];
@@ -775,7 +773,7 @@ createApp({
 
     const matrix = computed(() => {
       error.value = '';
-      const value = debouncedText.value.trim();
+      const value = text.value.trim();
       if (!value) return null;
       try {
         const qr = qrcode(0, ecLevel.value);
@@ -813,13 +811,6 @@ createApp({
     });
 
     const canDownload = computed(() => !!matrix.value && !error.value);
-
-    watch(text, (newVal) => {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        debouncedText.value = newVal;
-      }, 150);
-    });
 
     function renderToCanvas(onSuccess, onError){
       const size = printSize.value;

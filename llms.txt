@@ -1,0 +1,17 @@
+# Free QR Code Generator — No Signup
+
+> A free, privacy-first QR code generator. No account required, no expiry, and nothing you type is ever uploaded — QR codes are generated entirely client-side in the browser.
+
+## Pages
+
+- [QR Code Generator](https://qrcodenosignup.com/): Generate a static QR code from any link or text, free, with no signup. Adjustable error correction level, padding, and export size (64–1024px), plus custom foreground/background colors with a built-in contrast checker. Download as PNG or SVG, or copy directly to the clipboard.
+
+## Facts
+
+- Free, no signup or account required, no watermark
+- Generates static QR codes — the content is encoded directly into the code itself, not behind a redirect or tracking service, so codes never expire or get deactivated
+- Runs entirely client-side in the browser; nothing typed is uploaded to a server
+- Export formats: PNG, SVG, or copy to clipboard
+- Adjustable error correction levels: Low, Standard, Strong, Max
+- Adjustable quiet zone (padding): None, Small, Standard, Large
+- Adjustable export size: 64px to 1024px
