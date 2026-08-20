@@ -32,18 +32,11 @@
 <meta name="twitter:description" content="Create a free static QR code from any link or text — no signup required, no expiry. Customize colors, download PNG or SVG.">
 <meta name="twitter:image" content="https://qrcodenosignup.com/og-image.png">
 
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<script src="https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.prod.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
-
-<!-- Google Analytics — replace G-XXXXXXXXXX with your real GA4 Measurement ID -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
-</script>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.js" as="script" crossorigin>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.2/qrcode.min.js" as="script" crossorigin>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.2/qrcode.min.js" defer></script>
 
 <script type="application/ld+json">
 {
@@ -227,6 +220,9 @@
     text-decoration-color: rgba(255,255,255,.55);
   }
   .lede-link:hover{ text-decoration-color: #ffffff; }
+  @media (max-width: 760px){
+    .lede-break{ display:none; }
+  }
   html{ scroll-behavior: smooth; }
   .faq-item:target{
     background: var(--bg);
@@ -276,7 +272,7 @@
     background: var(--pop);
     display:inline-block;
     padding: 3px 9px;
-    border-radius: var(--radius-full);
+    border-radius: 3px;
     margin-bottom: var(--space-2);
   }
 
@@ -333,13 +329,13 @@
   }
   .field-label-row .field-label{ margin-bottom:0; }
   .field > .field-label{ margin-bottom: var(--space-2); }
-  .label-group{ display:flex; align-items:center; gap: var(--space-2); }
 
   .contrast-warning{
     font-family: var(--font-mono);
     font-size: var(--text-2xs);
     color: var(--danger);
     white-space:nowrap;
+    margin-left: auto;
   }
   .reset-link{
     font-family: var(--font-mono);
@@ -381,9 +377,10 @@
   }
   .seg button{
     flex:1;
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    padding: 9px 6px;
+    font-family: var(--font-heading);
+    font-weight:600;
+    font-size: var(--text-base);
+    padding: 11px 12px;
     border:none;
     background: var(--panel);
     color: var(--ink-soft);
@@ -408,7 +405,7 @@
   .swatch{ display:flex; align-items:center; gap:9px; flex-wrap:nowrap; white-space:nowrap; }
   .swatch-box{
     display:inline-flex;
-    width:28px; height:28px;
+    width:44px; height:44px;
     border: var(--border);
     border-radius: var(--radius-sm);
     overflow:hidden;
@@ -463,16 +460,6 @@
     background-position: 0 0, 0 12px, 12px -12px, -12px 0;
   }
   .qr-wrap svg{ display:block; width:100%; height:100%; }
-  .scanline{
-    position:absolute; left:0; right:0; height:2px;
-    background: linear-gradient(90deg, transparent, var(--signal), transparent);
-    animation: sweep 1s cubic-bezier(.3,.7,.4,1) forwards;
-    pointer-events:none;
-  }
-  @keyframes sweep{
-    from{ top:0; opacity:1; }
-    to{ top:100%; opacity:0; }
-  }
   .empty-state{
     position:absolute; inset:0;
     display:flex; align-items:center; justify-content:center;
@@ -516,9 +503,6 @@
     margin-top: var(--space-2);
   }
 
-  @media (prefers-reduced-motion: reduce){
-    .scanline{ animation:none !important; }
-  }
 </style>
 </head>
 <body>
@@ -527,7 +511,7 @@
   <div class="wrap">
     <main>
     <h1>Free QR code generator <span class="pop-word">no signup required</span></h1>
-    <p class="lede">Paste a link or type any text and get a scannable QR code in seconds.<br>No account required — and <a href="#faq-privacy" class="lede-link">we never see what you type</a>.</p>
+    <p class="lede">Paste a link or type any text and get a scannable QR code in seconds.<br class="lede-break">No account required — and <a href="#faq-privacy" class="lede-link">we never see what you type</a>.</p>
 
     <div class="layout">
       <!-- Controls -->
@@ -542,7 +526,10 @@
         </div>
 
         <div class="field">
-          <label class="field-label" id="ec-label">Error Correction</label>
+          <div class="field-label-row">
+            <label class="field-label" id="ec-label">Error Correction</label>
+            <a href="#faq-correction" class="reset-link">What's this?</a>
+          </div>
           <div class="seg" role="group" aria-labelledby="ec-label">
             <button
               v-for="level in ecLevels"
@@ -582,11 +569,8 @@
 
         <div class="field">
           <div class="field-label-row">
-            <span class="label-group">
-              <label class="field-label">Colors</label>
-              <button type="button" class="reset-link" @click="resetColors">Reset</button>
-            </span>
-            <span v-if="lowContrast" class="contrast-warning">⚠ Low contrast</span>
+            <label class="field-label">Colors</label>
+            <button type="button" class="reset-link" @click="resetColors">Reset Colors</button>
           </div>
           <div class="swatch-row">
             <label class="swatch" for="fg-color">
@@ -597,6 +581,7 @@
               <span class="swatch-box"><input id="bg-color" type="color" v-model="paperColor" aria-label="Background color"></span>
               <span class="label">Background</span>
             </label>
+            <span v-if="lowContrast" class="contrast-warning">⚠ Low contrast</span>
           </div>
         </div>
       </div>
@@ -611,8 +596,7 @@
         <div class="qr-wrap" role="img" aria-label="Generated QR code preview">
           <div v-if="!text.trim()" class="empty-state"><span>Your code will appear here</span></div>
           <div v-else-if="error" class="empty-state"><span>{{ error }}</span></div>
-          <div v-else v-html="svgMarkup" :key="printKey"></div>
-          <div v-if="showScan" class="scanline"></div>
+          <div v-else v-html="svgMarkup"></div>
         </div>
         <div class="downloads">
           <button class="dl-btn" :disabled="!canDownload" @click="downloadPNG">Download PNG</button>
@@ -685,7 +669,7 @@
           <h3>Is my data uploaded anywhere?</h3>
           <p>No. The QR code is generated entirely in your browser using JavaScript. What you type is never sent to a server.</p>
         </div>
-        <div class="faq-item">
+        <div class="faq-item" id="faq-correction">
           <h3>What is error correction, and which level should I use?</h3>
           <p>Error correction lets a QR code still scan even if part of it is damaged, dirty, or partly covered by a logo. Standard is a good default for most uses; use Max if the code will be printed small or placed somewhere it might get scuffed.</p>
         </div>
@@ -731,8 +715,6 @@ createApp({
     const inkColor = ref('#10201c');
     const paperColor = ref('#ffffff');
     const error = ref('');
-    const showScan = ref(false);
-    const printKey = ref(0);
     const copied = ref(false);
 
     const ecLevels = [
@@ -839,14 +821,6 @@ createApp({
       }, 150);
     });
 
-    watch(debouncedText, (newVal, oldVal) => {
-      if (newVal.trim() && !oldVal.trim()){
-        printKey.value++;
-        showScan.value = false;
-        requestAnimationFrame(() => { showScan.value = true; });
-      }
-    });
-
     function renderToCanvas(onSuccess, onError){
       const size = printSize.value;
       const svgBlob = new Blob([svgMarkup.value], { type: 'image/svg+xml;charset=utf-8' });
@@ -883,13 +857,17 @@ createApp({
       img.src = url;
     }
 
+    function filenameFor(ext){
+      return `qrcodenosignup-${Date.now()}.${ext}`;
+    }
+
     function downloadSVG(){
       if (!canDownload.value) return;
       const blob = new Blob([svgMarkup.value], { type: 'image/svg+xml' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'qr-code.svg';
+      a.download = filenameFor('svg');
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -899,7 +877,7 @@ createApp({
       renderToCanvas((blob) => {
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'qr-code.png';
+        a.download = filenameFor('png');
         a.click();
       }, () => {
         error.value = 'Could not render the PNG in this browser — try SVG instead.';
@@ -923,7 +901,7 @@ createApp({
 
     return {
       text, ecLevel, ecLevels, ecLevelLabel, printSize, sizeOptions, quietZone, paddingOptions, inkColor, paperColor,
-      error, matrix, svgMarkup, canDownload, showScan, printKey, copied, lowContrast,
+      error, matrix, svgMarkup, canDownload, copied, lowContrast,
       downloadPNG, downloadSVG, copyToClipboard, resetColors,
     };
   }
