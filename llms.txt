@@ -4,14 +4,19 @@
 
 ## Pages
 
-- [QR Code Generator](https://qrcodenosignup.com/): Generate a static QR code from any link or text, free, with no signup. Adjustable error correction level, padding, and export size (64–1024px), plus custom foreground/background colors with a built-in contrast checker. Download as PNG or SVG, or copy directly to the clipboard.
+- [QR Code Generator](https://qrcodenosignup.com/): Generate a static QR code, free, with no signup. Supports three content types — plain link/text, a dedicated Wi-Fi network preset (network name, password, security type, hidden-network option), and a vCard preset (name, organization, phone, email, website). Adjustable error correction level, padding, and export size (64–1024px), plus custom foreground/background colors with a built-in contrast checker. Download as PNG or SVG, or copy directly to the clipboard.
 
 ## Facts
 
 - Free, no signup or account required, no watermark
 - Generates static QR codes — the content is encoded directly into the code itself, not behind a redirect or tracking service, so codes never expire or get deactivated
 - Runs entirely client-side in the browser; nothing typed is uploaded to a server
+- Three content types: Text, Wi-Fi, vCard
+- Wi-Fi mode generates the correct WIFI:T:...;S:...;P:...;; format automatically, including special-character escaping
+- vCard mode generates a standard vCard, which most phones offer to save directly to contacts when scanned
 - Export formats: PNG, SVG, or copy to clipboard
 - Adjustable error correction levels: Low, Standard, Strong, Max
 - Adjustable quiet zone (padding): None, Small, Standard, Large
 - Adjustable export size: 64px to 1024px
+- A QR code can hold up to about 4,296 alphanumeric characters, or around 7,089 digits, at the lowest error correction level
+- Settings (content type, error correction, size, padding, colors) persist across visits via local storage; typed content never persists

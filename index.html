@@ -80,7 +80,7 @@
       "@type": "HowToStep",
       "position": 1,
       "name": "Choose a type and add your content",
-      "text": "Pick Link/Text, Wi-Fi, or Contact Card, then fill in the details — a URL, your network name and password, or someone's contact info."
+      "text": "Pick Text, Wi-Fi, or vCard, then fill in the details — a URL, your network name and password, or someone's contact info."
     },
     {
       "@type": "HowToStep",
@@ -150,7 +150,7 @@
     {
       "@type": "Question",
       "name": "Can I make a QR code for a contact card (vCard)?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Select Contact Card from the type selector and fill in a name, organization, phone, email, or website. Scanning the code prompts most phones to save the details directly to contacts." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Select vCard from the type selector and fill in a name, organization, phone, email, or website. Scanning the code prompts most phones to save the details directly to contacts." }
     }
   ]
 }
@@ -464,6 +464,10 @@
   }
   .seg button{
     flex:1;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
     font-family: var(--font-heading);
     font-weight:600;
     font-size: var(--text-base);
@@ -475,6 +479,12 @@
     border-right: var(--border);
     transition: background .15s, color .15s;
   }
+  .seg-icon{
+    display:inline-flex;
+    width:16px; height:16px;
+    flex-shrink:0;
+  }
+  .seg-icon svg{ width:100%; height:100%; }
   .seg button:last-child{ border-right:none; }
   .seg button[aria-pressed="true"]{
     background: var(--pop);
@@ -612,7 +622,7 @@
               type="button"
               :aria-pressed="contentType === t.value"
               @click="contentType = t.value"
-            >{{ t.label }}</button>
+            ><span class="seg-icon" v-html="typeIcons[t.value]"></span>{{ t.label }}</button>
           </div>
         </div>
 
@@ -701,7 +711,7 @@
               :key="level.value"
               type="button"
               :aria-pressed="ecLevel === level.value"
-              @click="ecLevel = level.value"
+              @click="selectEcLevel(level.value)"
             >{{ level.label }}</button>
           </div>
         </div>
@@ -714,7 +724,7 @@
               :key="s"
               type="button"
               :aria-pressed="printSize === s"
-              @click="printSize = s"
+              @click="selectSize(s)"
             >{{ s }}</button>
           </div>
         </div>
@@ -727,7 +737,7 @@
               :key="p.value"
               type="button"
               :aria-pressed="quietZone === p.value"
-              @click="quietZone = p.value"
+              @click="selectPadding(p.value)"
             >{{ p.label }}</button>
           </div>
         </div>
@@ -759,9 +769,9 @@
           <span>PADDING <b>{{ quietZone }}</b></span>
         </div>
         <div class="qr-wrap" role="img" aria-label="Generated QR code preview">
-          <div v-if="!qrPayload.trim()" class="empty-state"><span>Your code will appear here</span></div>
-          <div v-else-if="error" class="empty-state"><span>{{ error }}</span></div>
-          <div v-else v-html="svgMarkup"></div>
+          <div v-if="!qrPayload.trim()" key="empty" class="empty-state"><span>Your code will appear here</span></div>
+          <div v-else-if="error" key="error" class="empty-state"><span>{{ error }}</span></div>
+          <div v-else key="code" v-html="svgMarkup"></div>
         </div>
         <div class="downloads">
           <button class="dl-btn" :disabled="!canDownload" @click="downloadPNG">Download PNG</button>
@@ -778,7 +788,7 @@
         <li class="card radius-md">
           <span class="step-num">STEP 1</span>
           <h3>Choose a type and add your content</h3>
-          <p>Pick Link/Text, Wi-Fi, or Contact Card, then fill in the details — a URL, your network name and password, or someone's contact info.</p>
+          <p>Pick Text, Wi-Fi, or vCard, then fill in the details — a URL, your network name and password, or someone's contact info.</p>
         </li>
         <li class="card radius-md">
           <span class="step-num">STEP 2</span>
@@ -864,7 +874,7 @@
         </div>
         <div class="faq-item">
           <h3>Can I make a QR code for a contact card (vCard)?</h3>
-          <p><strong>Yes.</strong> Select <strong>Contact Card</strong> from the type selector and fill in a name, organization, phone, email, or website. Scanning the code prompts most phones to save the details directly to contacts.</p>
+          <p><strong>Yes.</strong> Select <strong>vCard</strong> from the type selector and fill in a name, organization, phone, email, or website. Scanning the code prompts most phones to save the details directly to contacts.</p>
         </div>
       </div>
     </section>
@@ -878,17 +888,22 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-const { createApp, ref, computed } = Vue;
+const { createApp, ref, computed, watch } = Vue;
 
 createApp({
   setup(){
     const text = ref('');
     const contentType = ref('text');
     const contentTypes = [
-      { value: 'text', label: 'Link / Text' },
+      { value: 'text', label: 'Text' },
       { value: 'wifi', label: 'Wi-Fi' },
-      { value: 'contact', label: 'Contact Card' },
+      { value: 'contact', label: 'vCard' },
     ];
+    const typeIcons = {
+      text: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 6h12M4 10h8M4 14h10"/></svg>',
+      wifi: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a10 10 0 0 1 14 0"/><path d="M6 11a6 6 0 0 1 8 0"/><path d="M9 14a2 2 0 0 1 2 0"/><circle cx="10" cy="16.2" r="0.7" fill="currentColor" stroke="none"/></svg>',
+      contact: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="15" height="11" rx="1.6"/><circle cx="7" cy="9.3" r="1.6"/><path d="M4.8 12.8c0.5-1.3 1.6-2 2.2-2s1.7 0.7 2.2 2"/><path d="M12 8.3h3M12 10.6h3M12 12.9h2"/></svg>',
+    };
 
     const wifiSSID = ref('');
     const wifiPassword = ref('');
@@ -905,6 +920,23 @@ createApp({
     const contactPhone = ref('');
     const contactEmail = ref('');
     const contactUrl = ref('');
+
+    // Switching content type should feel like starting fresh — clear every
+    // mode's fields (not just the one you're leaving) so nothing lingers
+    // silently in memory and reappears if you switch back later.
+    watch(contentType, (newVal) => {
+      text.value = '';
+      wifiSSID.value = '';
+      wifiPassword.value = '';
+      wifiSecurity.value = 'WPA';
+      wifiHidden.value = false;
+      contactName.value = '';
+      contactOrg.value = '';
+      contactPhone.value = '';
+      contactEmail.value = '';
+      contactUrl.value = '';
+      trackEvent('select_content_type', { type: newVal });
+    });
 
     const ecLevel = ref('M');
     const printSize = ref(256);
@@ -926,6 +958,45 @@ createApp({
       const found = ecLevels.find(l => l.value === ecLevel.value);
       return found ? found.label : ecLevel.value;
     });
+
+    // Persist settings/preferences only — never the typed content (text,
+    // Wi-Fi credentials, contact details) since that's personal data with
+    // no reason to sit around in a browser's local storage indefinitely.
+    const STORAGE_KEY = 'qrgen-settings';
+
+    function loadSettings(){
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        if (contentTypes.some(t => t.value === saved.contentType)) contentType.value = saved.contentType;
+        if (ecLevels.some(l => l.value === saved.ecLevel)) ecLevel.value = saved.ecLevel;
+        if (sizeOptions.includes(saved.printSize)) printSize.value = saved.printSize;
+        if ([0, 1, 2, 3].includes(saved.quietZone)) quietZone.value = saved.quietZone;
+        if (typeof saved.inkColor === 'string') inkColor.value = saved.inkColor;
+        if (typeof saved.paperColor === 'string') paperColor.value = saved.paperColor;
+      } catch (e) {
+        // corrupted or inaccessible storage — just start with defaults
+      }
+    }
+
+    function saveSettings(){
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          contentType: contentType.value,
+          ecLevel: ecLevel.value,
+          printSize: printSize.value,
+          quietZone: quietZone.value,
+          inkColor: inkColor.value,
+          paperColor: paperColor.value,
+        }));
+      } catch (e) {
+        // storage disabled or full — settings just won't persist this session
+      }
+    }
+
+    loadSettings();
+    watch([contentType, ecLevel, printSize, quietZone, inkColor, paperColor], saveSettings);
 
     const paddingOptions = [
       { value: 0, label: 'None' },
@@ -1039,6 +1110,19 @@ createApp({
 
     const canDownload = computed(() => !!matrix.value && !error.value);
 
+    // Fires a GA4 event if gtag is available (it's injected by Cloudflare,
+    // not this page, so this stays a safe no-op anywhere that isn't set up
+    // — local dev, a fork without analytics, etc).
+    function trackEvent(name, params){
+      if (typeof gtag === 'function'){
+        gtag('event', name, params || {});
+      }
+    }
+
+    function selectEcLevel(v){ ecLevel.value = v; trackEvent('select_error_correction', { level: v }); }
+    function selectPadding(v){ quietZone.value = v; trackEvent('select_padding', { value: v }); }
+    function selectSize(v){ printSize.value = v; trackEvent('select_export_size', { size: v }); }
+
     function renderToCanvas(onSuccess, onError){
       const size = printSize.value;
       const svgBlob = new Blob([svgMarkup.value], { type: 'image/svg+xml;charset=utf-8' });
@@ -1088,6 +1172,7 @@ createApp({
       a.download = filenameFor('svg');
       a.click();
       URL.revokeObjectURL(url);
+      trackEvent('download_qr', { format: 'svg', content_type: contentType.value });
     }
 
     function downloadPNG(){
@@ -1097,6 +1182,7 @@ createApp({
         a.href = URL.createObjectURL(blob);
         a.download = filenameFor('png');
         a.click();
+        trackEvent('download_qr', { format: 'png', content_type: contentType.value });
       }, () => {
         error.value = 'Could not render the PNG in this browser — try SVG instead.';
       });
@@ -1109,6 +1195,7 @@ createApp({
           await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
           copied.value = true;
           setTimeout(() => { copied.value = false; }, 1500);
+          trackEvent('download_qr', { format: 'clipboard', content_type: contentType.value });
         } catch (e) {
           error.value = 'Clipboard copy is not supported in this browser.';
         }
@@ -1118,12 +1205,12 @@ createApp({
     }
 
     return {
-      text, contentType, contentTypes,
+      text, contentType, contentTypes, typeIcons,
       wifiSSID, wifiPassword, wifiSecurity, wifiHidden, wifiSecurityOptions,
       contactName, contactOrg, contactPhone, contactEmail, contactUrl,
       ecLevel, ecLevels, ecLevelLabel, printSize, sizeOptions, quietZone, paddingOptions, inkColor, paperColor,
       error, matrix, qrPayload, svgMarkup, canDownload, copied, lowContrast,
-      downloadPNG, downloadSVG, copyToClipboard, resetColors,
+      downloadPNG, downloadSVG, copyToClipboard, resetColors, selectEcLevel, selectPadding, selectSize,
     };
   }
 }).mount('#app');
