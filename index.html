@@ -166,6 +166,7 @@
     --ink: #10201c;
     --ink-soft: #55645f;
     --line: #d7ddda;
+    --placeholder: #93a29c;
     --signal: #0b7a5d;
     --pop: #ffd166;
     --pop-2: #ff6b6b;
@@ -196,12 +197,17 @@
     --space-7: 56px;
 
     /* ---- Radius scale ---- */
+    --radius-2xs: 3px;
     --radius-xs: 6px;
     --radius-sm: 8px;
     --radius-md: 10px;
     --radius-lg: 14px;
     --radius-xl: 18px;
     --radius-full: 999px;
+
+    /* ---- Shared control height (buttons, inputs, swatches) ---- */
+    --ctrl-h: 44px;
+    --ctrl-px: 12px;
 
     /* ---- Border / shadow tokens ---- */
     --border-w: 2px;
@@ -227,25 +233,22 @@
 
   .github-link{
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: 22px;
+    right: 22px;
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    width:40px; height:40px;
-    background: var(--panel);
-    border: var(--border);
-    border-radius: var(--radius-full);
-    color: var(--ink);
-    box-shadow: var(--shadow-sm);
-    transition: transform .1s;
+    width:32px; height:32px;
+    color: rgba(255,255,255,.8);
+    opacity: .9;
+    transition: color .15s, opacity .15s, transform .15s;
     z-index: 10;
   }
   .github-link svg{ width:22px; height:22px; }
-  .github-link:hover{ transform: translateY(-2px); }
+  .github-link:hover{ color:#ffffff; opacity:1; transform: translateY(-1px); }
   @media (max-width: 500px){
-    .github-link{ width:34px; height:34px; top:12px; right:12px; }
-    .github-link svg{ width:18px; height:18px; }
+    .github-link{ width:28px; height:28px; top:14px; right:14px; }
+    .github-link svg{ width:19px; height:19px; }
   }
 
   /* ---- Shared card style ---- */
@@ -327,7 +330,7 @@
     font-size: var(--text-md);
     font-weight:600;
     color: var(--ink);
-    margin: 0 0 6px;
+    margin: 0 0 var(--space-1);
   }
   .feature-card p, .steps-list p{
     font-size: var(--text-sm);
@@ -344,7 +347,7 @@
     background: var(--pop);
     display:inline-block;
     padding: 3px 9px;
-    border-radius: 3px;
+    border-radius: var(--radius-2xs);
     margin-bottom: var(--space-2);
   }
 
@@ -455,22 +458,23 @@
     transition: box-shadow .15s;
   }
   textarea:focus{ box-shadow: 0 0 0 3px rgba(255,209,102,.5); }
-  textarea::placeholder{ color:#93a29c; }
+  textarea::placeholder{ color:var(--placeholder); }
 
   .text-input{
     width:100%;
+    height: var(--ctrl-h);
     background: var(--panel);
     border: var(--border);
     border-radius: var(--radius-xs);
     color: var(--ink);
     font-family: var(--font-body);
     font-size: var(--text-base);
-    padding: var(--space-2) var(--space-3);
+    padding: 0 var(--space-3);
     outline:none;
     transition: box-shadow .15s;
   }
   .text-input:focus{ box-shadow: 0 0 0 3px rgba(255,209,102,.5); }
-  .text-input::placeholder{ color:#93a29c; }
+  .text-input::placeholder{ color:var(--placeholder); }
   .text-input:disabled{ background: var(--bg); color: var(--ink-soft); cursor:not-allowed; }
 
   .checkbox-field label{
@@ -480,11 +484,7 @@
     cursor:pointer;
     font-size: var(--text-base);
     color: var(--ink);
-    min-height: 44px;
-    padding: 0 var(--space-3);
-    border: var(--border);
-    border-radius: var(--radius-xs);
-    background: var(--panel);
+    min-height: var(--ctrl-h);
   }
   .checkbox-field input[type="checkbox"]{
     width:22px; height:22px;
@@ -505,10 +505,11 @@
     align-items:center;
     justify-content:center;
     gap:6px;
+    height:var(--ctrl-h);
     font-family: var(--font-heading);
     font-weight:600;
     font-size: var(--text-base);
-    padding: 11px 12px;
+    padding: 0 var(--ctrl-px);
     border:none;
     background: var(--panel);
     color: var(--ink-soft);
@@ -543,7 +544,7 @@
   .swatch{ display:flex; align-items:center; gap:9px; flex-wrap:nowrap; white-space:nowrap; }
   .swatch-box{
     display:inline-flex;
-    width:44px; height:44px;
+    width:var(--ctrl-h); height:var(--ctrl-h);
     border: var(--border);
     border-radius: var(--radius-sm);
     overflow:hidden;
@@ -617,13 +618,14 @@
   .dl-btn{
     flex:1;
     min-width: 120px;
+    height: var(--ctrl-h);
     font-family: var(--font-heading);
     font-weight:600;
     font-size: var(--text-base);
     color: var(--ink);
     background: var(--pop);
     border: var(--border);
-    padding: 11px 12px;
+    padding: 0 var(--ctrl-px);
     border-radius: var(--radius-md);
     cursor:pointer;
     box-shadow: 3px 3px 0 rgba(16,32,28,.3);
