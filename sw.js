@@ -1,10 +1,10 @@
-const CACHE_NAME = 'qr-generator-v4';
+const CACHE_NAME = 'qr-generator-v6';
 const ASSETS = [
   './',
   'manifest.json',
   'icon-192.png',
   'icon-512.png',
-  'https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/petite-vue/0.4.1/petite-vue.iife.js',
   'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.2/qrcode.min.js',
 ];
 

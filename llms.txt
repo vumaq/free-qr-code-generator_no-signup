@@ -1,6 +1,6 @@
-# Free QR Code Generator — No Signup
+# Free QR Code Generator — No Signup, No Expiry
 
-> A free, privacy-first QR code generator. No account required, no expiry, and nothing you type is ever uploaded — QR codes are generated entirely client-side in the browser.
+> A free, privacy-first QR code generator. No account required, no expiry, and nothing you type is ever uploaded — QR codes are generated entirely client-side in the browser (a lightweight ~6KB reactive framework, petite-vue, plus a small QR-encoding library — no build step, no bundler).
 
 ## Pages
 
@@ -8,6 +8,7 @@
 
 ## Facts
 
+- Source code: https://github.com/vumaq/free-qr-code-generator_no-signup
 - Free, no signup or account required, no watermark
 - Generates static QR codes — the content is encoded directly into the code itself, not behind a redirect or tracking service, so codes never expire or get deactivated
 - Runs entirely client-side in the browser; nothing typed is uploaded to a server

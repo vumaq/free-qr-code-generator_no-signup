@@ -34,9 +34,9 @@
 <meta name="twitter:image" content="https://qrcodenosignup.com/og-image.png">
 
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.js" as="script" crossorigin>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/petite-vue/0.4.1/petite-vue.iife.js" as="script" crossorigin>
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.2/qrcode.min.js" as="script" crossorigin>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/petite-vue/0.4.1/petite-vue.iife.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.2/qrcode.min.js" defer></script>
 
 <script type="application/ld+json">
@@ -47,6 +47,7 @@
   "url": "https://qrcodenosignup.com/",
   "description": "Create a QR code from any link or text free, with no signup required. Choose custom colors and padding, then download as PNG or SVG.",
   "applicationCategory": "UtilitiesApplication",
+  "codeRepository": "https://github.com/vumaq/free-qr-code-generator_no-signup",
   "operatingSystem": "Any (runs in browser)",
   "inLanguage": "en",
   "datePublished": "2026-08-20",
@@ -224,6 +225,29 @@
   }
   .wrap{ width:100%; max-width: 1120px; }
 
+  .github-link{
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:40px; height:40px;
+    background: var(--panel);
+    border: var(--border);
+    border-radius: var(--radius-full);
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+    transition: transform .1s;
+    z-index: 10;
+  }
+  .github-link svg{ width:22px; height:22px; }
+  .github-link:hover{ transform: translateY(-2px); }
+  @media (max-width: 500px){
+    .github-link{ width:34px; height:34px; top:12px; right:12px; }
+    .github-link svg{ width:18px; height:18px; }
+  }
+
   /* ---- Shared card style ---- */
   .card{
     background: var(--panel);
@@ -354,6 +378,13 @@
     font-size: var(--text-sm);
     text-align:center;
   }
+  .footer-link{
+    color: #ffffff;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: rgba(255,255,255,.55);
+  }
+  .footer-link:hover{ text-decoration-color: #ffffff; }
 
   .layout{
     display:grid;
@@ -449,11 +480,17 @@
     cursor:pointer;
     font-size: var(--text-base);
     color: var(--ink);
+    min-height: 44px;
+    padding: 0 var(--space-3);
+    border: var(--border);
+    border-radius: var(--radius-xs);
+    background: var(--panel);
   }
   .checkbox-field input[type="checkbox"]{
-    width:18px; height:18px;
+    width:22px; height:22px;
     accent-color: var(--pop);
     cursor:pointer;
+    flex-shrink:0;
   }
 
   .seg{
@@ -479,9 +516,13 @@
     border-right: var(--border);
     transition: background .15s, color .15s;
   }
+  .seg--icons button{
+    justify-content:flex-start;
+    padding-left: var(--space-3);
+  }
   .seg-icon{
     display:inline-flex;
-    width:16px; height:16px;
+    width:26px; height:26px;
     flex-shrink:0;
   }
   .seg-icon svg{ width:100%; height:100%; }
@@ -593,21 +634,18 @@
   .dl-btn:disabled{ opacity:.35; cursor:not-allowed; transform:none; box-shadow: 3px 3px 0 rgba(16,32,28,.3); }
   .dl-btn:focus-visible{ outline: 2px solid var(--signal); outline-offset:2px; }
 
-  .error-msg{
-    font-family: var(--font-label);
-    font-size: var(--text-sm);
-    color: var(--danger);
-    margin-top: var(--space-2);
-  }
 
 </style>
 </head>
 <body>
 
 <div id="app">
+  <a href="https://github.com/vumaq/free-qr-code-generator_no-signup" target="_blank" rel="noopener noreferrer" class="github-link" aria-label="View source on GitHub">
+    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+  </a>
   <div class="wrap">
     <main>
-    <h1>Free QR code generator <span class="pop-word">no signup required</span></h1>
+    <h1>Free QR code generator <span class="pop-word">no signup, no expiry</span></h1>
     <p class="lede">Paste a link or type any text and get a scannable QR code in seconds.<br class="lede-break">No account required — and <a href="#faq-privacy" class="lede-link">we never see what you type</a>.</p>
 
     <div class="layout">
@@ -615,13 +653,13 @@
       <div class="panel card radius-lg">
         <div class="field">
           <label class="field-label" id="type-label">Type</label>
-          <div class="seg" role="group" aria-labelledby="type-label">
+          <div class="seg seg--icons" role="group" aria-labelledby="type-label">
             <button
               v-for="t in contentTypes"
               :key="t.value"
               type="button"
               :aria-pressed="contentType === t.value"
-              @click="contentType = t.value"
+              @click="selectType(t.value)"
             ><span class="seg-icon" v-html="typeIcons[t.value]"></span>{{ t.label }}</button>
           </div>
         </div>
@@ -749,11 +787,11 @@
           </div>
           <div class="swatch-row">
             <label class="swatch" for="fg-color">
-              <span class="swatch-box"><input id="fg-color" type="color" v-model="inkColor" aria-label="Foreground color"></span>
+              <span class="swatch-box"><input id="fg-color" type="color" :value="inkColor" @input="setInkColor($event.target.value)" aria-label="Foreground color"></span>
               <span class="label">Foreground</span>
             </label>
             <label class="swatch" for="bg-color">
-              <span class="swatch-box"><input id="bg-color" type="color" v-model="paperColor" aria-label="Background color"></span>
+              <span class="swatch-box"><input id="bg-color" type="color" :value="paperColor" @input="setPaperColor($event.target.value)" aria-label="Background color"></span>
               <span class="label">Background</span>
             </label>
             <span v-if="lowContrast" class="contrast-warning">⚠ Low contrast</span>
@@ -778,7 +816,6 @@
           <button class="dl-btn" :disabled="!canDownload" @click="downloadSVG">Download SVG</button>
           <button class="dl-btn" :disabled="!canDownload" @click="copyToClipboard" aria-label="Copy QR code to clipboard">{{ copied ? 'Copied!' : 'Clipboard' }}</button>
         </div>
-        <div v-if="error" class="error-msg">{{ error }}</div>
       </div>
     </div>
 
@@ -881,200 +918,177 @@
     </main>
 
     <footer>
-      <p>Free static QR code generator — no signup required, no expiry. Codes are generated locally in your browser.</p>
+      <p>Free static QR code generator — no signup required, no expiry. Codes are generated locally in your browser. <a href="https://github.com/vumaq/free-qr-code-generator_no-signup" target="_blank" rel="noopener noreferrer" class="footer-link">View source on GitHub</a>.</p>
     </footer>
   </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-const { createApp, ref, computed, watch } = Vue;
 
-createApp({
-  setup(){
-    const text = ref('');
-    const contentType = ref('text');
-    const contentTypes = [
-      { value: 'text', label: 'Text' },
-      { value: 'wifi', label: 'Wi-Fi' },
-      { value: 'contact', label: 'vCard' },
-    ];
-    const typeIcons = {
-      text: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 6h12M4 10h8M4 14h10"/></svg>',
-      wifi: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a10 10 0 0 1 14 0"/><path d="M6 11a6 6 0 0 1 8 0"/><path d="M9 14a2 2 0 0 1 2 0"/><circle cx="10" cy="16.2" r="0.7" fill="currentColor" stroke="none"/></svg>',
-      contact: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="15" height="11" rx="1.6"/><circle cx="7" cy="9.3" r="1.6"/><path d="M4.8 12.8c0.5-1.3 1.6-2 2.2-2s1.7 0.7 2.2 2"/><path d="M12 8.3h3M12 10.6h3M12 12.9h2"/></svg>',
-    };
+// ---- Pure helper functions (no reactive state needed) ----
 
-    const wifiSSID = ref('');
-    const wifiPassword = ref('');
-    const wifiSecurity = ref('WPA');
-    const wifiHidden = ref(false);
-    const wifiSecurityOptions = [
-      { value: 'WPA', label: 'WPA/WPA2' },
-      { value: 'WEP', label: 'WEP' },
-      { value: 'nopass', label: 'None' },
-    ];
+function hexToRgb(hex){
+  const h = hex.replace('#', '');
+  return {
+    r: parseInt(h.substring(0,2), 16),
+    g: parseInt(h.substring(2,4), 16),
+    b: parseInt(h.substring(4,6), 16),
+  };
+}
 
-    const contactName = ref('');
-    const contactOrg = ref('');
-    const contactPhone = ref('');
-    const contactEmail = ref('');
-    const contactUrl = ref('');
+function relLuminance(hex){
+  const { r, g, b } = hexToRgb(hex);
+  const [rl, gl, bl] = [r, g, b].map(c => {
+    c /= 255;
+    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * rl + 0.7152 * gl + 0.0722 * bl;
+}
 
-    // Switching content type should feel like starting fresh — clear every
-    // mode's fields (not just the one you're leaving) so nothing lingers
-    // silently in memory and reappears if you switch back later.
-    watch(contentType, (newVal) => {
-      text.value = '';
-      wifiSSID.value = '';
-      wifiPassword.value = '';
-      wifiSecurity.value = 'WPA';
-      wifiHidden.value = false;
-      contactName.value = '';
-      contactOrg.value = '';
-      contactPhone.value = '';
-      contactEmail.value = '';
-      contactUrl.value = '';
-      trackEvent('select_content_type', { type: newVal });
-    });
+function contrastRatio(hexA, hexB){
+  const la = relLuminance(hexA), lb = relLuminance(hexB);
+  const lighter = Math.max(la, lb), darker = Math.min(la, lb);
+  return (lighter + 0.05) / (darker + 0.05);
+}
 
-    const ecLevel = ref('M');
-    const printSize = ref(256);
-    const sizeOptions = [64, 128, 256, 512, 1024];
-    const quietZone = ref(2);
-    const inkColor = ref('#10201c');
-    const paperColor = ref('#ffffff');
-    const error = ref('');
-    const copied = ref(false);
+function escapeWifi(s){
+  return (s || '').replace(/([\\;,"])/g, '\\$1');
+}
 
-    const ecLevels = [
-      { value: 'L', label: 'Low' },
-      { value: 'M', label: 'Standard' },
-      { value: 'Q', label: 'Strong' },
-      { value: 'H', label: 'Max' },
-    ];
+// Fires a GA4 event if gtag is available (it's injected by Cloudflare, not
+// this page, so this stays a safe no-op anywhere that isn't set up — local
+// dev, a fork without analytics, etc).
+function trackEvent(name, params){
+  if (typeof gtag === 'function'){
+    gtag('event', name, params || {});
+  }
+}
 
-    const ecLevelLabel = computed(() => {
-      const found = ecLevels.find(l => l.value === ecLevel.value);
-      return found ? found.label : ecLevel.value;
-    });
+// ---- Settings persistence (preferences only — never typed content) ----
 
-    // Persist settings/preferences only — never the typed content (text,
-    // Wi-Fi credentials, contact details) since that's personal data with
-    // no reason to sit around in a browser's local storage indefinitely.
-    const STORAGE_KEY = 'qrgen-settings';
+const STORAGE_KEY = 'qrgen-settings';
+const CONTENT_TYPE_VALUES = ['text', 'wifi', 'contact'];
+const EC_LEVEL_VALUES = ['L', 'M', 'Q', 'H'];
+const SIZE_VALUES = [64, 128, 256, 512, 1024];
+const PADDING_VALUES = [0, 1, 2, 3];
 
-    function loadSettings(){
+function loadSettings(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return {};
+    const saved = JSON.parse(raw);
+    const result = {};
+    if (CONTENT_TYPE_VALUES.includes(saved.contentType)) result.contentType = saved.contentType;
+    if (EC_LEVEL_VALUES.includes(saved.ecLevel)) result.ecLevel = saved.ecLevel;
+    if (SIZE_VALUES.includes(saved.printSize)) result.printSize = saved.printSize;
+    if (PADDING_VALUES.includes(saved.quietZone)) result.quietZone = saved.quietZone;
+    if (typeof saved.inkColor === 'string') result.inkColor = saved.inkColor;
+    if (typeof saved.paperColor === 'string') result.paperColor = saved.paperColor;
+    return result;
+  } catch (e) {
+    return {};
+  }
+}
+
+const saved = loadSettings();
+
+PetiteVue.createApp({
+  // ---- State ----
+  text: '',
+  contentType: saved.contentType || 'text',
+  contentTypes: [
+    { value: 'text', label: 'Text' },
+    { value: 'wifi', label: 'Wi-Fi' },
+    { value: 'contact', label: 'vCard' },
+  ],
+  typeIcons: {
+    text: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 6h12M4 10h8M4 14h10"/></svg>',
+    wifi: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a10 10 0 0 1 14 0"/><path d="M6 11a6 6 0 0 1 8 0"/><path d="M9 14a2 2 0 0 1 2 0"/><circle cx="10" cy="16.2" r="0.7" fill="currentColor" stroke="none"/></svg>',
+    contact: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="15" height="11" rx="1.6"/><circle cx="7" cy="9.3" r="1.6"/><path d="M4.8 12.8c0.5-1.3 1.6-2 2.2-2s1.7 0.7 2.2 2"/><path d="M12 8.3h3M12 10.6h3M12 12.9h2"/></svg>',
+  },
+
+  wifiSSID: '',
+  wifiPassword: '',
+  wifiSecurity: 'WPA',
+  wifiHidden: false,
+  wifiSecurityOptions: [
+    { value: 'WPA', label: 'WPA/WPA2' },
+    { value: 'WEP', label: 'WEP' },
+    { value: 'nopass', label: 'None' },
+  ],
+
+  contactName: '',
+  contactOrg: '',
+  contactPhone: '',
+  contactEmail: '',
+  contactUrl: '',
+
+  ecLevel: saved.ecLevel || 'M',
+  ecLevels: [
+    { value: 'L', label: 'Low' },
+    { value: 'M', label: 'Standard' },
+    { value: 'Q', label: 'Strong' },
+    { value: 'H', label: 'Max' },
+  ],
+  get ecLevelLabel(){
+    const found = this.ecLevels.find(l => l.value === this.ecLevel);
+    return found ? found.label : this.ecLevel;
+  },
+
+  printSize: saved.printSize || 256,
+  sizeOptions: SIZE_VALUES,
+  quietZone: saved.quietZone !== undefined ? saved.quietZone : 2,
+  paddingOptions: [
+    { value: 0, label: 'None' },
+    { value: 1, label: 'Small' },
+    { value: 2, label: 'Standard' },
+    { value: 3, label: 'Large' },
+  ],
+  inkColor: saved.inkColor || '#10201c',
+  paperColor: saved.paperColor || '#ffffff',
+
+  renderError: '',   // set by canvas/clipboard runtime failures
+  copied: false,
+
+  // ---- Derived values (plain getters — petite-vue has no computed()) ----
+
+  get qrPayload(){
+    if (this.contentType === 'wifi'){
+      if (!this.wifiSSID.trim()) return '';
+      const parts = [`WIFI:T:${this.wifiSecurity}`, `S:${escapeWifi(this.wifiSSID)}`];
+      if (this.wifiSecurity !== 'nopass'){
+        parts.push(`P:${escapeWifi(this.wifiPassword)}`);
+      }
+      if (this.wifiHidden) parts.push('H:true');
+      return parts.join(';') + ';;';
+    }
+    if (this.contentType === 'contact'){
+      if (!this.contactName.trim()) return '';
+      const lines = ['BEGIN:VCARD', 'VERSION:3.0', `FN:${this.contactName.trim()}`];
+      if (this.contactOrg.trim()) lines.push(`ORG:${this.contactOrg.trim()}`);
+      if (this.contactPhone.trim()) lines.push(`TEL:${this.contactPhone.trim()}`);
+      if (this.contactEmail.trim()) lines.push(`EMAIL:${this.contactEmail.trim()}`);
+      if (this.contactUrl.trim()) lines.push(`URL:${this.contactUrl.trim()}`);
+      lines.push('END:VCARD');
+      return lines.join('\n');
+    }
+    return this.text;
+  },
+
+  // Bundles the QR matrix and any generation error into one result so
+  // reading either doesn't recompute QR generation twice independently.
+  _qrCache: { key: null, value: null },
+  get qrResult(){
+    const value = this.qrPayload.trim();
+    const key = value + '|' + this.ecLevel;
+    if (this._qrCache.key === key) return this._qrCache.value;
+    let result;
+    if (!value) {
+      result = { matrix: null, error: '' };
+    } else {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return;
-        const saved = JSON.parse(raw);
-        if (contentTypes.some(t => t.value === saved.contentType)) contentType.value = saved.contentType;
-        if (ecLevels.some(l => l.value === saved.ecLevel)) ecLevel.value = saved.ecLevel;
-        if (sizeOptions.includes(saved.printSize)) printSize.value = saved.printSize;
-        if ([0, 1, 2, 3].includes(saved.quietZone)) quietZone.value = saved.quietZone;
-        if (typeof saved.inkColor === 'string') inkColor.value = saved.inkColor;
-        if (typeof saved.paperColor === 'string') paperColor.value = saved.paperColor;
-      } catch (e) {
-        // corrupted or inaccessible storage — just start with defaults
-      }
-    }
-
-    function saveSettings(){
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({
-          contentType: contentType.value,
-          ecLevel: ecLevel.value,
-          printSize: printSize.value,
-          quietZone: quietZone.value,
-          inkColor: inkColor.value,
-          paperColor: paperColor.value,
-        }));
-      } catch (e) {
-        // storage disabled or full — settings just won't persist this session
-      }
-    }
-
-    loadSettings();
-    watch([contentType, ecLevel, printSize, quietZone, inkColor, paperColor], saveSettings);
-
-    const paddingOptions = [
-      { value: 0, label: 'None' },
-      { value: 1, label: 'Small' },
-      { value: 2, label: 'Standard' },
-      { value: 3, label: 'Large' },
-    ];
-
-    function resetColors(){
-      inkColor.value = '#10201c';
-      paperColor.value = '#ffffff';
-    }
-
-    function hexToRgb(hex){
-      const h = hex.replace('#', '');
-      return {
-        r: parseInt(h.substring(0,2), 16),
-        g: parseInt(h.substring(2,4), 16),
-        b: parseInt(h.substring(4,6), 16),
-      };
-    }
-
-    function relLuminance(hex){
-      const { r, g, b } = hexToRgb(hex);
-      const [rl, gl, bl] = [r, g, b].map(c => {
-        c /= 255;
-        return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-      });
-      return 0.2126 * rl + 0.7152 * gl + 0.0722 * bl;
-    }
-
-    function contrastRatio(hexA, hexB){
-      const la = relLuminance(hexA), lb = relLuminance(hexB);
-      const lighter = Math.max(la, lb), darker = Math.min(la, lb);
-      return (lighter + 0.05) / (darker + 0.05);
-    }
-
-    const lowContrast = computed(() => {
-      try {
-        return contrastRatio(inkColor.value, paperColor.value) < 3;
-      } catch (e) {
-        return false;
-      }
-    });
-
-    function escapeWifi(s){
-      return (s || '').replace(/([\\;,"])/g, '\\$1');
-    }
-
-    const qrPayload = computed(() => {
-      if (contentType.value === 'wifi'){
-        if (!wifiSSID.value.trim()) return '';
-        const parts = [`WIFI:T:${wifiSecurity.value}`, `S:${escapeWifi(wifiSSID.value)}`];
-        if (wifiSecurity.value !== 'nopass'){
-          parts.push(`P:${escapeWifi(wifiPassword.value)}`);
-        }
-        if (wifiHidden.value) parts.push('H:true');
-        return parts.join(';') + ';;';
-      }
-      if (contentType.value === 'contact'){
-        if (!contactName.value.trim()) return '';
-        const lines = ['BEGIN:VCARD', 'VERSION:3.0', `FN:${contactName.value.trim()}`];
-        if (contactOrg.value.trim()) lines.push(`ORG:${contactOrg.value.trim()}`);
-        if (contactPhone.value.trim()) lines.push(`TEL:${contactPhone.value.trim()}`);
-        if (contactEmail.value.trim()) lines.push(`EMAIL:${contactEmail.value.trim()}`);
-        if (contactUrl.value.trim()) lines.push(`URL:${contactUrl.value.trim()}`);
-        lines.push('END:VCARD');
-        return lines.join('\n');
-      }
-      return text.value;
-    });
-
-    const matrix = computed(() => {
-      error.value = '';
-      const value = qrPayload.value.trim();
-      if (!value) return null;
-      try {
-        const qr = qrcode(0, ecLevel.value);
+        const qr = qrcode(0, this.ecLevel);
         qr.addData(value);
         qr.make();
         const count = qr.getModuleCount();
@@ -1085,137 +1099,178 @@ createApp({
           }
         }
         const version = Math.round((count - 17) / 4);
-        return { count, cells, version };
+        result = { matrix: { count, cells, version }, error: '' };
       } catch (e) {
-        error.value = "Too much content for a code — try shorter text or a lower correction level.";
-        return null;
-      }
-    });
-
-    const svgMarkup = computed(() => {
-      if (!matrix.value) return '';
-      const { count, cells } = matrix.value;
-      const quiet = quietZone.value;
-      const total = count + quiet * 2;
-      let rects = '';
-      for (const [row, col] of cells){
-        const x = col + quiet, y = row + quiet;
-        rects += `<rect x="${x}" y="${y}" width="1" height="1" fill="${inkColor.value}"/>`;
-      }
-      return `<svg viewBox="0 0 ${total} ${total}" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">` +
-             `<rect x="0" y="0" width="${total}" height="${total}" fill="${paperColor.value}"/>` +
-             rects +
-             `</svg>`;
-    });
-
-    const canDownload = computed(() => !!matrix.value && !error.value);
-
-    // Fires a GA4 event if gtag is available (it's injected by Cloudflare,
-    // not this page, so this stays a safe no-op anywhere that isn't set up
-    // — local dev, a fork without analytics, etc).
-    function trackEvent(name, params){
-      if (typeof gtag === 'function'){
-        gtag('event', name, params || {});
+        result = { matrix: null, error: "Too much content for a code — try shorter text or a lower correction level." };
       }
     }
+    this._qrCache = { key, value: result };
+    return result;
+  },
+  get matrix(){ return this.qrResult.matrix; },
+  get error(){ return this.qrResult.error || this.renderError; },
 
-    function selectEcLevel(v){ ecLevel.value = v; trackEvent('select_error_correction', { level: v }); }
-    function selectPadding(v){ quietZone.value = v; trackEvent('select_padding', { value: v }); }
-    function selectSize(v){ printSize.value = v; trackEvent('select_export_size', { size: v }); }
+  get svgMarkup(){
+    if (!this.matrix) return '';
+    const { count, cells } = this.matrix;
+    const quiet = this.quietZone;
+    const total = count + quiet * 2;
+    let rects = '';
+    for (const [row, col] of cells){
+      const x = col + quiet, y = row + quiet;
+      rects += `<rect x="${x}" y="${y}" width="1" height="1" fill="${this.inkColor}"/>`;
+    }
+    return `<svg viewBox="0 0 ${total} ${total}" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">` +
+           `<rect x="0" y="0" width="${total}" height="${total}" fill="${this.paperColor}"/>` +
+           rects +
+           `</svg>`;
+  },
 
-    function renderToCanvas(onSuccess, onError){
-      const size = printSize.value;
-      const svgBlob = new Blob([svgMarkup.value], { type: 'image/svg+xml;charset=utf-8' });
-      const url = URL.createObjectURL(svgBlob);
-      const img = new Image();
-      // Set explicit dimensions before assigning src — older Safari can
-      // otherwise mis-size or drop the async decode for SVG data.
-      img.width = size;
-      img.height = size;
-      img.onload = () => {
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = size;
-          canvas.height = size;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, size, size);
-          URL.revokeObjectURL(url);
-          canvas.toBlob((blob) => {
-            if (!blob) {
-              if (onError) onError();
-              return;
-            }
-            onSuccess(blob);
-          });
-        } catch (e) {
-          URL.revokeObjectURL(url);
-          if (onError) onError();
-        }
-      };
-      img.onerror = () => {
+  get canDownload(){ return !!this.matrix && !this.qrResult.error; },
+
+  get lowContrast(){
+    try {
+      return contrastRatio(this.inkColor, this.paperColor) < 3;
+    } catch (e) {
+      return false;
+    }
+  },
+
+  // ---- Methods ----
+
+  saveSettings(){
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        contentType: this.contentType,
+        ecLevel: this.ecLevel,
+        printSize: this.printSize,
+        quietZone: this.quietZone,
+        inkColor: this.inkColor,
+        paperColor: this.paperColor,
+      }));
+    } catch (e) {
+      // storage disabled or full — settings just won't persist this session
+    }
+  },
+
+  // Switching content type should feel like starting fresh — clear every
+  // mode's fields (not just the one you're leaving) so nothing lingers
+  // silently in memory and reappears if you switch back later.
+  selectType(v){
+    this.contentType = v;
+    this.text = '';
+    this.wifiSSID = '';
+    this.wifiPassword = '';
+    this.wifiSecurity = 'WPA';
+    this.wifiHidden = false;
+    this.contactName = '';
+    this.contactOrg = '';
+    this.contactPhone = '';
+    this.contactEmail = '';
+    this.contactUrl = '';
+    this.renderError = '';
+    trackEvent('select_content_type', { type: v });
+    this.saveSettings();
+  },
+
+  selectEcLevel(v){ this.ecLevel = v; trackEvent('select_error_correction', { level: v }); this.saveSettings(); },
+  selectPadding(v){ this.quietZone = v; trackEvent('select_padding', { value: v }); this.saveSettings(); },
+  selectSize(v){ this.printSize = v; trackEvent('select_export_size', { size: v }); this.saveSettings(); },
+  setInkColor(v){ this.inkColor = v; this.saveSettings(); },
+  setPaperColor(v){ this.paperColor = v; this.saveSettings(); },
+
+  resetColors(){
+    this.inkColor = '#10201c';
+    this.paperColor = '#ffffff';
+    this.saveSettings();
+  },
+
+  renderToCanvas(onSuccess, onError){
+    const size = this.printSize;
+    const svgBlob = new Blob([this.svgMarkup], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+    const img = new Image();
+    // Set explicit dimensions before assigning src — older Safari can
+    // otherwise mis-size or drop the async decode for SVG data.
+    img.width = size;
+    img.height = size;
+    img.onload = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, size, size);
+        URL.revokeObjectURL(url);
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            if (onError) onError();
+            return;
+          }
+          onSuccess(blob);
+        });
+      } catch (e) {
         URL.revokeObjectURL(url);
         if (onError) onError();
-      };
-      img.src = url;
-    }
-
-    function filenameFor(ext){
-      return `qrcodenosignup-${Date.now()}.${ext}`;
-    }
-
-    function downloadSVG(){
-      if (!canDownload.value) return;
-      const blob = new Blob([svgMarkup.value], { type: 'image/svg+xml' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filenameFor('svg');
-      a.click();
-      URL.revokeObjectURL(url);
-      trackEvent('download_qr', { format: 'svg', content_type: contentType.value });
-    }
-
-    function downloadPNG(){
-      if (!canDownload.value) return;
-      renderToCanvas((blob) => {
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = filenameFor('png');
-        a.click();
-        trackEvent('download_qr', { format: 'png', content_type: contentType.value });
-      }, () => {
-        error.value = 'Could not render the PNG in this browser — try SVG instead.';
-      });
-    }
-
-    function copyToClipboard(){
-      if (!canDownload.value) return;
-      renderToCanvas(async (blob) => {
-        try {
-          await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-          copied.value = true;
-          setTimeout(() => { copied.value = false; }, 1500);
-          trackEvent('download_qr', { format: 'clipboard', content_type: contentType.value });
-        } catch (e) {
-          error.value = 'Clipboard copy is not supported in this browser.';
-        }
-      }, () => {
-        error.value = 'Could not render the image in this browser.';
-      });
-    }
-
-    return {
-      text, contentType, contentTypes, typeIcons,
-      wifiSSID, wifiPassword, wifiSecurity, wifiHidden, wifiSecurityOptions,
-      contactName, contactOrg, contactPhone, contactEmail, contactUrl,
-      ecLevel, ecLevels, ecLevelLabel, printSize, sizeOptions, quietZone, paddingOptions, inkColor, paperColor,
-      error, matrix, qrPayload, svgMarkup, canDownload, copied, lowContrast,
-      downloadPNG, downloadSVG, copyToClipboard, resetColors, selectEcLevel, selectPadding, selectSize,
+      }
     };
-  }
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      if (onError) onError();
+    };
+    img.src = url;
+  },
+
+  filenameFor(ext){
+    return `qrcodenosignup-${Date.now()}.${ext}`;
+  },
+
+  downloadSVG(){
+    if (!this.canDownload) return;
+    const blob = new Blob([this.svgMarkup], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = this.filenameFor('svg');
+    a.click();
+    URL.revokeObjectURL(url);
+    trackEvent('download_qr', { format: 'svg', content_type: this.contentType });
+  },
+
+  downloadPNG(){
+    if (!this.canDownload) return;
+    this.renderToCanvas((blob) => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = this.filenameFor('png');
+      a.click();
+      trackEvent('download_qr', { format: 'png', content_type: this.contentType });
+    }, () => {
+      this.renderError = 'Could not render the PNG in this browser — try SVG instead.';
+    });
+  },
+
+  copyToClipboard(){
+    if (!this.canDownload) return;
+    this.renderToCanvas(async (blob) => {
+      try {
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+        this.copied = true;
+        setTimeout(() => { this.copied = false; }, 1500);
+        trackEvent('download_qr', { format: 'clipboard', content_type: this.contentType });
+      } catch (e) {
+        this.renderError = 'Clipboard copy is not supported in this browser.';
+      }
+    }, () => {
+      this.renderError = 'Could not render the image in this browser.';
+    });
+  },
+
 }).mount('#app');
+
 });
 </script>
+
 
 <script>
   if ('serviceWorker' in navigator) {

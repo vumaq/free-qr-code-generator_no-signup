@@ -2,6 +2,8 @@
 
 **👉 Just want to make a QR code? Use it here: [qrcodenosignup.com](https://qrcodenosignup.com/)**
 
+**Source:** [github.com/vumaq/free-qr-code-generator_no-signup](https://github.com/vumaq/free-qr-code-generator_no-signup) — also linked from the site itself (top-right icon, and in the footer).
+
 No account, no install, nothing to download — open the link and generate a
 code. Everything below this point is for people who want to read the code,
 fork it, or self-host their own copy. If that's not you, the link above is
@@ -56,8 +58,14 @@ just use the live site above.
 
 ### Tech stack
 
-- **[Vue 3](https://vuejs.org/)** (loaded via CDN, no build tooling) for
-  reactivity
+- **[petite-vue](https://github.com/vuejs/petite-vue)** (~6KB, loaded via CDN,
+  no build tooling) for reactivity — migrated from full Vue 3 to cut payload
+  size. Same directive syntax (`v-if`, `@click`, `{{ }}`), but state is a
+  plain reactive object instead of `ref()`/`computed()`, since petite-vue
+  doesn't expose those — computed-style values are plain getters instead,
+  and there's no `watch()`, so side effects (saving to localStorage,
+  clearing fields on type switch) are called explicitly inside methods
+  rather than reactively
 - **[qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator)**
   for QR matrix generation — rendered as hand-built SVG so colors, padding,
   and export size are fully controllable client-side
@@ -70,13 +78,26 @@ just use the live site above.
 
 All text inputs (the content textarea, Wi-Fi fields, contact fields) are
 intentionally **uncontrolled** — bound with `@input` only, never `v-model` /
-`:value`. This is deliberate: since the whole app is one flat Vue component,
+`:value`. This is deliberate: since the whole app is one flat reactive scope,
 any reactive state change anywhere (clicking a padding button, picking a
 color) triggers a full re-render, and a controlled input's value binding can
 race with fast typing and silently drop or duplicate characters. Keeping
 inputs uncontrolled means the DOM is always the single source of truth for
 what's typed. Don't reintroduce `v-model` on these without being aware of
 this tradeoff.
+
+### A note on petite-vue's getters
+
+petite-vue has no `computed()` — derived values are plain JS getters, which
+are **not memoized** the way Vue's `computed()` is. `qrResult` (the actual
+QR-matrix generation) is manually memoized by cache key
+(`payload + errorCorrectionLevel`) for exactly this reason: without it, the
+getter reran on every property access within a single render (once each
+from `matrix`, `svgMarkup`, `canDownload`, and the template itself), which
+caused a real bug where typing anything immediately showed a false
+"too much content" error. If you add more derived getters that do
+real work (not just cheap lookups), consider whether they need the same
+manual memoization pattern.
 
 ### Project structure
 
